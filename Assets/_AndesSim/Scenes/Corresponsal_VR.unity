@@ -13775,16 +13775,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ee9730cb51c61e6bb1029609f84268e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ambient: {fileID: 0}
+  ambient: {fileID: 8300000, guid: c72e0b94622880790942484b25b7c0b8, type: 3}
   ambientVolume: 0.35
-  click: {fileID: 0}
+  click: {fileID: 8300000, guid: d4bc16545786ba6949c7c930e1142abe, type: 3}
   hover: {fileID: 0}
   evidence: {fileID: 0}
   defense: {fileID: 0}
-  alarm: {fileID: 0}
-  phoneRing: {fileID: 0}
-  phoneAnswer: {fileID: 0}
-  phoneNoAnswer: {fileID: 0}
+  alarm: {fileID: 8300000, guid: 101fa0523671dd63c8b77789cee904b3, type: 3}
+  phoneRing: {fileID: 8300000, guid: 4809d1140b4ec97018f3f941aa9d2232, type: 3}
+  phoneAnswer: {fileID: 8300000, guid: 484c2d0ab28f7fd6d935d6d8f995e347, type: 3}
+  phoneNoAnswer: {fileID: 8300000, guid: 8754ef24cabda1099838c07765ed871f, type: 3}
   orderIn: {fileID: 0}
   success: {fileID: 0}
   fail: {fileID: 0}

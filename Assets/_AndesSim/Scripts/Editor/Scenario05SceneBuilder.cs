@@ -112,7 +112,7 @@ namespace AndesSim.EditorTools
             gm.data = data;
             var ui = managers.AddComponent<UIManager>();
             ui.head = camGo.transform;
-            managers.AddComponent<AudioManager>();
+            AssignAudio(managers.AddComponent<AudioManager>());
 
             // ---------- sala ----------
             var room = new GameObject("Sala_Monitoreo").transform;
@@ -349,6 +349,66 @@ namespace AndesSim.EditorTools
             PlayerSettings.Android.forceInternetPermission = false;
             AssetDatabase.SaveAssets();
             Debug.Log("[AndesSim] Ajustes de Android aplicados (IL2CPP, ARM64, API 26+, horizontal).");
+        }
+
+        // ======================================================================
+        [MenuItem("AndesSim/4. Asignar audios de la carpeta Audio", priority = 4)]
+        public static void AssignAudioInOpenScene()
+        {
+            var am = Object.FindAnyObjectByType<AudioManager>();
+            if (am == null && File.Exists(ScenePath))
+            {
+                EditorSceneManager.OpenScene(ScenePath);
+                am = Object.FindAnyObjectByType<AudioManager>();
+            }
+            if (am == null) { Debug.LogError("[AndesSim] No hay AudioManager en la escena abierta."); return; }
+            int n = AssignAudio(am);
+            EditorSceneManager.MarkSceneDirty(am.gameObject.scene);
+            EditorSceneManager.SaveScene(am.gameObject.scene);
+            Debug.Log($"[AndesSim] {n} audios asignados al AudioManager.");
+        }
+
+        /// <summary>
+        /// Asigna cada campo AudioClip del AudioManager con el archivo de Assets/_AndesSim/Audio
+        /// que se llame igual (ambient.wav, alarm.wav, phoneRing.mp3, click.ogg...).
+        /// Los campos sin archivo quedan vacíos y usan el tono generado.
+        /// </summary>
+        static int AssignAudio(AudioManager am)
+        {
+            const string dir = Root + "/Audio";
+            var so = new SerializedObject(am);
+            int count = 0;
+            foreach (var f in typeof(AudioManager).GetFields())
+            {
+                if (f.FieldType != typeof(AudioClip)) continue;
+                foreach (var ext in new[] { ".wav", ".ogg", ".mp3" })
+                {
+                    string path = $"{dir}/{f.Name}{ext}";
+                    if (!File.Exists(path)) continue;
+                    ConfigureImporter(path, f.Name == "ambient");
+                    var clip = AssetDatabase.LoadAssetAtPath<AudioClip>(path);
+                    if (clip == null) continue;
+                    so.FindProperty(f.Name).objectReferenceValue = clip;
+                    count++;
+                    break;
+                }
+            }
+            so.ApplyModifiedPropertiesWithoutUndo();
+            return count;
+        }
+
+        /// <summary>Compresión para celular: el ambiente se transmite (stream); los efectos se cargan en memoria.</summary>
+        static void ConfigureImporter(string path, bool isLongLoop)
+        {
+            if (AssetImporter.GetAtPath(path) is not AudioImporter imp) return;
+            var s = imp.defaultSampleSettings;
+            s.compressionFormat = AudioCompressionFormat.Vorbis;
+            s.quality = isLongLoop ? 0.5f : 0.7f;
+            s.loadType = isLongLoop ? AudioClipLoadType.Streaming : AudioClipLoadType.DecompressOnLoad;
+            s.sampleRateSetting = AudioSampleRateSetting.OptimizeSampleRate;
+            imp.defaultSampleSettings = s;
+            imp.forceToMono = !isLongLoop;
+            imp.SaveAndReimport();
         }
 
         // ======================================================================
