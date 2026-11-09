@@ -1,0 +1,40 @@
+# Unity
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+sysinfo.txt
+crashlytics-buildid.txt
+
+# IDEs (Antigravity / VS Code / Rider)
+.vs/
+.vscode/
+.idea/
+.antigravity/
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.unityproj
+
+# Builds Android
+*.apk
+*.aab
+*.keystore
+!debug.keystore
+
+# Vuforia / licencias (no subir claves)
+**/VuforiaConfiguration.asset
+
+# SO
+.DS_Store
+Thumbs.db

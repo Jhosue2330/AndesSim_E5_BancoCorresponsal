@@ -1,0 +1,353 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b584719cb18ec4b94819dedab0d6c7cd, type: 3}
+  m_Name: Escenario05_Data
+  m_EditorClassIdentifier: 
+  scenarioNumber: 5
+  scenarioName: Banco Corresponsal Internacional
+  scenarioType: VR
+  dateRange: 4 al 8 feb 2016
+  story: "Jueves 4 de febrero de 2016, de noche. En la sala de monitoreo del Banco
+    Corresponsal Internacional entran \xF3rdenes SWIFT del BANCO ANDINO: 36 \xF3rdenes
+    por US$951 millones. Una alerta salta: la calle de la agencia receptora se llama
+    igual que un petrolero de una lista de sanciones. Treinta \xF3rdenes quedan congeladas,
+    pero cinco ya pasaron. Las consultas al BANCO ANDINO no tienen respuesta: es
+    fin de semana."
+  playerGoal: "Vigila las pantallas, decide qu\xE9 \xF3rdenes bloquear y verifica
+    por tel\xE9fono con el BANCO ANDINO."
+  vulnerabilities:
+  - "Contactos de emergencia solo en d\xEDas h\xE1biles."
+  - "Sin confirmaci\xF3n por un canal alterno (llamada a un n\xFAmero registrado)."
+  - "Reglas que no frenaron las 5 primeras \xF3rdenes (sin l\xEDmites por destino
+    ni por monto inusual)."
+  defenses:
+  - Contactos 24/7 para incidentes.
+  - "Confirmaci\xF3n por llamada a un n\xFAmero registrado."
+  - Reglas por destino y monto inusual.
+  resultAttack: "La alerta \xABJUPITER\xBB congel\xF3 30 \xF3rdenes, pero 5 ya se
+    hab\xEDan pagado: US$101 millones salieron."
+  resultDefense: "Las reglas y la llamada de verificaci\xF3n retienen las 5 \xF3rdenes:
+    no sale ni un d\xF3lar."
+  credits: "ANDES-SIM \xB7 Escenario 5 \xB7 Banco Corresponsal Internacional\nBasado
+    en hechos reales (Banco de Bangladesh, 2016). Entidades y personas ficticias.\nEquipo:
+    (completar nombres y roles)\nModelos 3D: (autor \xB7 licencia \xB7 enlace)\nAudio:
+    tonos generados por c\xF3digo (AudioManager) / (autor \xB7 licencia)\nHerramientas
+    de IA usadas: Claude Code (Anthropic), Google Antigravity."
+  orders:
+  - number: 1
+    reference: MT103-0402-001
+    beneficiary: Ramiro D. Castell
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Makati, Manila
+    country: Filipinas
+    amountMillions: 6
+    realFate: 0
+  - number: 2
+    reference: MT103-0402-002
+    beneficiary: "Julio P. Alc\xE1zar"
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Makati, Manila
+    country: Filipinas
+    amountMillions: 30
+    realFate: 0
+  - number: 3
+    reference: MT103-0402-003
+    beneficiary: "Andr\xE9s V. Montalvo"
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Makati, Manila
+    country: Filipinas
+    amountMillions: 20
+    realFate: 0
+  - number: 4
+    reference: MT103-0402-004
+    beneficiary: Ernesto Q. Villalba
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Makati, Manila
+    country: Filipinas
+    amountMillions: 25
+    realFate: 0
+  - number: 5
+    reference: MT103-0402-005
+    beneficiary: SHALIKA FANDATION
+    beneficiaryBank: Banco Isla Esmeralda
+    address: Colombo
+    country: Sri Lanka
+    amountMillions: 20
+    realFate: 0
+  - number: 6
+    reference: MT103-0402-006
+    beneficiary: Inversiones Coral Azul
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 25
+    realFate: 1
+  - number: 7
+    reference: MT103-0402-007
+    beneficiary: Comercial Marea Alta
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 30
+    realFate: 1
+  - number: 8
+    reference: MT103-0402-008
+    beneficiary: "Tom\xE1s R. Galindo"
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 35
+    realFate: 1
+  - number: 9
+    reference: MT103-0402-009
+    beneficiary: Grupo Brisa del Sur
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 20
+    realFate: 1
+  - number: 10
+    reference: MT103-0402-010
+    beneficiary: "Luc\xEDa M. Ferr\xE1n"
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 28
+    realFate: 1
+  - number: 11
+    reference: MT103-0402-011
+    beneficiary: Importadora Puerto Claro
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 32
+    realFate: 1
+  - number: 12
+    reference: MT103-0402-012
+    beneficiary: "H\xE9ctor S. Cabral"
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 27
+    realFate: 1
+  - number: 13
+    reference: MT103-0402-013
+    beneficiary: Servicios Arrecife
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 31
+    realFate: 1
+  - number: 14
+    reference: MT103-0402-014
+    beneficiary: Consorcio Ola Norte
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 29
+    realFate: 1
+  - number: 15
+    reference: MT103-0402-015
+    beneficiary: Pablo N. Ugarte
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 26
+    realFate: 1
+  - number: 16
+    reference: MT103-0402-016
+    beneficiary: Agroexport Las Islas
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 33
+    realFate: 1
+  - number: 17
+    reference: MT103-0402-017
+    beneficiary: "Diego F. Salmer\xF3n"
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 24
+    realFate: 1
+  - number: 18
+    reference: MT103-0402-018
+    beneficiary: "Textiles Bah\xEDa Verde"
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 30
+    realFate: 1
+  - number: 19
+    reference: MT103-0402-019
+    beneficiary: Naviera Faro Blanco
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 28
+    realFate: 1
+  - number: 20
+    reference: MT103-0402-020
+    beneficiary: Mateo J. Rivas
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 27
+    realFate: 1
+  - number: 21
+    reference: MT103-0402-021
+    beneficiary: Constructora Isla Grande
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 31
+    realFate: 1
+  - number: 22
+    reference: MT103-0402-022
+    beneficiary: "\xD3scar L. Pineda"
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 29
+    realFate: 1
+  - number: 23
+    reference: MT103-0402-023
+    beneficiary: "Log\xEDstica Coral"
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 30
+    realFate: 1
+  - number: 24
+    reference: MT103-0402-024
+    beneficiary: "Distribuidora Atol\xF3n"
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 26
+    realFate: 1
+  - number: 25
+    reference: MT103-0402-025
+    beneficiary: "Ra\xFAl E. Montero"
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 28
+    realFate: 1
+  - number: 26
+    reference: MT103-0402-026
+    beneficiary: "Energ\xEDa Costa Serena"
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 34
+    realFate: 1
+  - number: 27
+    reference: MT103-0402-027
+    beneficiary: "Iv\xE1n G. Robledo"
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 22
+    realFate: 1
+  - number: 28
+    reference: MT103-0402-028
+    beneficiary: Minera Cabo Norte
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 29
+    realFate: 1
+  - number: 29
+    reference: MT103-0402-029
+    beneficiary: Turismo Laguna
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 27
+    realFate: 1
+  - number: 30
+    reference: MT103-0402-030
+    beneficiary: "Sergio A. Vald\xE9s"
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 31
+    realFate: 1
+  - number: 31
+    reference: MT103-0402-031
+    beneficiary: "Comercial Pac\xEDfico Uno"
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 28
+    realFate: 1
+  - number: 32
+    reference: MT103-0402-032
+    beneficiary: "Fabi\xE1n C. Ortega"
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 30
+    realFate: 1
+  - number: 33
+    reference: MT103-0402-033
+    beneficiary: Holding Mar Abierto
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 26
+    realFate: 1
+  - number: 34
+    reference: MT103-0402-034
+    beneficiary: Inversiones Palmar
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 29
+    realFate: 1
+  - number: 35
+    reference: MT103-0402-035
+    beneficiary: "V\xEDctor H. Quiroga"
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 25
+    realFate: 1
+  - number: 36
+    reference: MT103-0402-036
+    beneficiary: (orden rechazada por formato, nunca reenviada)
+    beneficiaryBank: "Banco Pac\xEDfico Insular"
+    address: Agencia Las Palmeras, Calle Jupiter, Manila
+    country: Filipinas
+    amountMillions: 0
+    realFate: 2
+  sanctionsList:
+  - JUPITER
+  - OCEAN STAR VII
+  - NEPTUNE CARGO
+  - BLUE HORIZON
+  secondsBetweenOrders: 1.6
+  reviewSeconds: 9
+  unusualAmountMillions: 5
+  usualCountries:
+  - Estados Unidos
+  - Alemania
+  - "Jap\xF3n"
+  - Reino Unido
+  andinoEmergencyNumber: +00 (1) 555-0100 (ficticio)
+  callNoAnswerText: "S\xE1bado 6 de febrero. Suena y suena\u2026 Nadie contesta en
+    el BANCO ANDINO: los contactos de emergencia solo atienden de lunes a viernes.
+    Los mensajes SWIFT de consulta tampoco tienen respuesta."
+  callVerifiedText: "L\xEDnea de incidentes 24/7 del BANCO ANDINO: \xABNo reconocemos
+    esas \xF3rdenes. No las autorizamos. Retengan todo\xBB. Las 5 \xF3rdenes pasan
+    a RETENIDAS."
