@@ -20,9 +20,9 @@ Regla: no tocar archivos de una tarea `EN CURSO` de otro agente.
 | # | Tarea | Dueño | Estado |
 |---|---|---|---|
 | 8 | Reemplazar primitivas por modelos libres: sala de monitoreo, escritorios, teléfono, pantallas curvas | Antigravity | PENDIENTE |
-| 9 | Audios: ambiente de sala, alarma, teléfono sonando, tono de llamada, clic de mirada (CC0) → asignar en `AudioManager` | Antigravity | EN CURSO (Antigravity) |
+| 9 | Audios: ambiente de sala, alarma, teléfono sonando, tono de llamada, clic de mirada (CC0) → asignar en `AudioManager` | Antigravity | HECHO |
 | 10 | Pulir UI de pantallas (fuentes, colores estilo terminal verde/rojo, legibilidad en VR) | Antigravity | PENDIENTE |
-| 11 | Texto de créditos completo (autores, licencias, IA usadas) en `ScenarioData.credits` | Antigravity | PENDIENTE |
+| 11 | Texto de créditos completo (autores, licencias, IA usadas) en `ScenarioData.credits` | Antigravity | HECHO |
 | 12 | Probar en celular, ajustar escala de textos y distancia de pantallas | Humano | PENDIENTE |
 
 ## Sprint 3 · Entrega

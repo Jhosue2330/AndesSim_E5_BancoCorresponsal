@@ -39,8 +39,12 @@ MonoBehaviour:
     no sale ni un d\xF3lar."
   credits: "ANDES-SIM \xB7 Escenario 5 \xB7 Banco Corresponsal Internacional\nBasado
     en hechos reales (Banco de Bangladesh, 2016). Entidades y personas ficticias.\nEquipo:
-    (completar nombres y roles)\nModelos 3D: (autor \xB7 licencia \xB7 enlace)\nAudio:
-    tonos generados por c\xF3digo (AudioManager) / (autor \xB7 licencia)\nHerramientas
+    (completar nombres y roles)\nModelos 3D: (autor \xB7 licencia \xB7 enlace)\nAudio
+    (Freesound, licencia CC0 1.0):\n- \"Server Room Ambience\" \xB7 SoundDesignForYou
+    \xB7 freesound.org/s/646682\n- \"Digital Alarm Loop.wav\" \xB7 bbrocer \xB7 freesound.org/s/389511\n-
+    \"phone ringing.mp3\" \xB7 Rebecca_f \xB7 freesound.org/s/425660\n- \"Busy Signal\"
+    \xB7 ramicio \xB7 freesound.org/s/158428\n- \"Soft UI Button Click\" \xB7 Jummit
+    \xB7 freesound.org/s/528561\n- \"Phone pick up / hang up\" \xB7 deraj \xB7 freesound.org/s/218083\nHerramientas
     de IA usadas: Claude Code (Anthropic), Google Antigravity."
   orders:
   - number: 1
