@@ -8,5 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_AndesSim/Scenes/Corresponsal_VR.unity
     guid: ae166538a6d722eac871d199250956f7
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 634e6ae903f49f79ab459385a1276ca7, type: 2}
   m_UseUCBPForAssetBundles: 0

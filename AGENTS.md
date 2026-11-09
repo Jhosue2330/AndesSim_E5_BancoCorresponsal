@@ -86,9 +86,13 @@ Namespace de todo el código: `AndesSim` (y `AndesSim.Scenario05`, `AndesSim.Edi
    Nunca borres ni regeneres archivos `.meta`.
 4. No cambies firmas públicas del contrato (sección 2). Agrega, no rompas.
 5. Un cambio = un commit pequeño con mensaje claro (`feat(e5): ...`, `fix(core): ...`).
-6. El código debe compilar sin el plugin de Cardboard (usamos `GazeReticlePointer` propio,
-   compatible con los mensajes `OnPointerEnter/Exit/Click` de `CardboardReticlePointer`).
-7. Input: el proyecto usa el **Input Manager clásico** (`activeInputHandler: 0`).
+6. Cardboard XR Plugin (v1.36) está instalado. Todo el código que usa `Google.XR.Cardboard`
+   va SOLO en `Scripts/Cardboard/` (ensamblado `AndesSim.Cardboard`); el resto del código no lo
+   referencia. Usamos `GazeReticlePointer` propio (mensajes `OnPointerEnter/Exit/Click`).
+7. Input: **Both** (`activeInputHandler: 2`): nuestro código usa el Input Manager clásico y
+   Cardboard usa el Input System. No cambiarlo.
+9. Android: la configuración se aplica con el menú `AndesSim > 3. Configurar proyecto para Android`
+   y el APK con `AndesSim > 5. Generar APK`. No editar a mano `Assets/Plugins/Android` ni `Assets/XR`.
 8. Textos con TextMeshPro (`com.unity.ugui` 2.0).
 
 ## 6. Reglas éticas del curso (incumplir = nota anulada)

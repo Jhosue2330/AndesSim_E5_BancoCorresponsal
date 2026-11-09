@@ -1,0 +1,27 @@
+{
+    "name": "AndesSim.Cardboard.Editor",
+    "rootNamespace": "AndesSim.EditorTools",
+    "references": [
+        "Unity.XR.Management",
+        "Unity.XR.Management.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "ANDESSIM_XR_MANAGEMENT"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.xr.management",
+            "expression": "4.0.0",
+            "define": "ANDESSIM_XR_MANAGEMENT"
+        }
+    ],
+    "noEngineReferences": false
+}

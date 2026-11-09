@@ -113,6 +113,8 @@ namespace AndesSim.EditorTools
             var ui = managers.AddComponent<UIManager>();
             ui.head = camGo.transform;
             AssignAudio(managers.AddComponent<AudioManager>());
+            var bootstrap = System.Type.GetType("AndesSim.CardboardBootstrap, AndesSim.Cardboard");
+            if (bootstrap != null) managers.AddComponent(bootstrap);
 
             // ---------- sala ----------
             var room = new GameObject("Sala_Monitoreo").transform;
@@ -348,11 +350,86 @@ namespace AndesSim.EditorTools
             PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.andessim.e5corresponsal");
             PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android, ScriptingImplementation.IL2CPP);
             PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64;
+            // Valores de la guía oficial de Cardboard para Unity.
             PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel26;
+            PlayerSettings.Android.targetSdkVersion = (AndroidSdkVersions)35;
             PlayerSettings.defaultInterfaceOrientation = UIOrientation.LandscapeLeft;
-            PlayerSettings.Android.forceInternetPermission = false;
+            PlayerSettings.Android.optimizedFramePacing = false;
+            PlayerSettings.Android.forceInternetPermission = true;
+            PlayerSettings.Android.applicationEntry = AndroidApplicationEntry.Activity;
+            PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.Android, false);
+            PlayerSettings.SetGraphicsAPIs(BuildTarget.Android, new[] { UnityEngine.Rendering.GraphicsDeviceType.OpenGLES3 });
+            SetActiveInputHandling(2); // 2 = Ambos (Input Manager clásico + Input System, que usa Cardboard)
+            WriteGradleTemplates();
+
+            // Activar Cardboard en XR Plug-in Management (si el paquete está instalado).
+            var xr = System.Type.GetType("AndesSim.EditorTools.CardboardXRSetup, AndesSim.Cardboard.Editor");
+            if (xr != null) xr.GetMethod("Configure")?.Invoke(null, null);
+            else Debug.LogWarning("[AndesSim] Falta el paquete Cardboard / XR Management: no se configuró XR.");
+
             AssetDatabase.SaveAssets();
-            Debug.Log("[AndesSim] Ajustes de Android aplicados (IL2CPP, ARM64, API 26+, horizontal).");
+            Debug.Log("[AndesSim] Android configurado para Cardboard (IL2CPP, ARM64, API 26–35, OpenGL ES3, horizontal, Gradle).");
+        }
+
+        [MenuItem("AndesSim/5. Generar APK (Builds/AndesSim_E5.apk)", priority = 5)]
+        public static void BuildApk()
+        {
+            Directory.CreateDirectory("Builds");
+            var opts = new BuildPlayerOptions
+            {
+                scenes = new[] { ScenePath },
+                locationPathName = "Builds/AndesSim_E5.apk",
+                target = BuildTarget.Android,
+                targetGroup = BuildTargetGroup.Android,
+                options = BuildOptions.None
+            };
+            var report = BuildPipeline.BuildPlayer(opts);
+            var s = report.summary;
+            Debug.Log($"[AndesSim] Build {s.result}: {s.outputPath} · {s.totalSize / (1024f * 1024f):0.0} MB · {s.totalErrors} errores · {s.totalTime.TotalMinutes:0.0} min");
+            if (Application.isBatchMode && s.result != UnityEditor.Build.Reporting.BuildResult.Succeeded) EditorApplication.Exit(1);
+        }
+
+        static void SetActiveInputHandling(int value)
+        {
+            var ps = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset");
+            if (ps == null || ps.Length == 0) return;
+            var so = new SerializedObject(ps[0]);
+            var prop = so.FindProperty("activeInputHandler");
+            if (prop == null || prop.intValue == value) return;
+            prop.intValue = value;
+            so.ApplyModifiedPropertiesWithoutUndo();
+            Debug.LogWarning("[AndesSim] Active Input Handling cambiado a «Both». Reinicia Unity para aplicarlo.");
+        }
+
+        /// <summary>Plantillas de Gradle con las dependencias que pide Cardboard.</summary>
+        static void WriteGradleTemplates()
+        {
+            const string dir = "Assets/Plugins/Android";
+            string src = Path.Combine(EditorApplication.applicationContentsPath, "PlaybackEngines/AndroidPlayer/Tools/GradleTemplates");
+            if (!Directory.Exists(src)) { Debug.LogError("[AndesSim] Falta el módulo Android Build Support."); return; }
+            Directory.CreateDirectory(dir);
+
+            string main = Path.Combine(dir, "mainTemplate.gradle");
+            if (!File.Exists(main)) File.Copy(Path.Combine(src, "mainTemplate.gradle"), main);
+            string text = File.ReadAllText(main);
+            string[] deps =
+            {
+                "implementation 'androidx.appcompat:appcompat:1.6.1'",
+                "implementation 'com.google.android.gms:play-services-vision:20.1.3'",
+                "implementation 'com.google.android.material:material:1.12.0'",
+                "implementation 'com.google.protobuf:protobuf-javalite:3.19.4'"
+            };
+            foreach (var d in deps)
+                if (!text.Contains(d)) text = text.Replace("**DEPS**", "    " + d + "\n**DEPS**");
+            File.WriteAllText(main, text);
+
+            string props = Path.Combine(dir, "gradleTemplate.properties");
+            if (!File.Exists(props)) File.Copy(Path.Combine(src, "gradleTemplate.properties"), props);
+            string p = File.ReadAllText(props);
+            foreach (var line in new[] { "android.enableJetifier=true", "android.useAndroidX=true" })
+                if (!p.Contains(line)) p = p.Replace("**ADDITIONAL_PROPERTIES**", line + "\n**ADDITIONAL_PROPERTIES**");
+            File.WriteAllText(props, p);
+            AssetDatabase.Refresh();
         }
 
         // ======================================================================

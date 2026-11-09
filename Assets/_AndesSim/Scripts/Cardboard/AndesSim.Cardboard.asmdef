@@ -1,0 +1,24 @@
+{
+    "name": "AndesSim.Cardboard",
+    "rootNamespace": "AndesSim",
+    "references": [
+        "Google.XR.Cardboard"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "ANDESSIM_CARDBOARD"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.google.xr.cardboard",
+            "expression": "1.0.0",
+            "define": "ANDESSIM_CARDBOARD"
+        }
+    ],
+    "noEngineReferences": false
+}
