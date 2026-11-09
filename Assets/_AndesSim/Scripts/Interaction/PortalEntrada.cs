@@ -27,8 +27,12 @@ namespace AndesSim
             var gm = GameManager.I;
             if (gm != null && gm.data != null)
             {
-                if (introTitle) introTitle.text = $"ESCENARIO {gm.data.scenarioNumber:00} · {gm.data.scenarioName.ToUpperInvariant()}\n<size=60%>{gm.data.dateRange}</size>";
-                if (introBody) introBody.text = gm.data.story + "\n\n<color=#38f28a>" + gm.data.playerGoal + "</color>\n\nMira un botón y toca la pantalla (o sigue mirando 2 s) para entrar.";
+                if (introTitle) introTitle.text = $"ESCENARIO {gm.data.scenarioNumber:00} · {gm.data.scenarioName.ToUpperInvariant()}";
+                if (introBody) introBody.text =
+                    $"<color=#ffc24a>{gm.data.dateRange}</color>\n" +
+                    gm.data.story + "\n" +
+                    "<color=#38f28a>" + gm.data.playerGoal + "</color>\n" +
+                    "<size=85%><color=#9fb5aa>Mira un botón y toca la pantalla (o sigue mirando 2 s) para entrar.</color></size>";
             }
         }
 

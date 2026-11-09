@@ -264,6 +264,7 @@ namespace AndesSim.Scenario05
             tmp.textWrappingMode = TextWrappingModes.NoWrap;
             tmp.overflowMode = TextOverflowModes.Ellipsis;
             tmp.raycastTarget = false;
+            tmp.characterSpacing = 1.5f;
 
             var view = go.AddComponent<OrderRowView>();
             view.label = tmp;

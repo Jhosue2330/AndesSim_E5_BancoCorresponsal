@@ -298,8 +298,12 @@ namespace AndesSim.EditorTools
             var intro = MakeCanvas("Panel_Intro", portalRoot, new Vector3(0, 1.75f, -11.2f), Quaternion.identity, new Vector2(1500, 1000), 0.0016f);
             Img(intro, "Fondo", PanelBg, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             Txt(intro, "Marca", "ANDES-SIM · BANCO ANDINO · UNIDAD DE RESPUESTA", 28, Green, TextAlignmentOptions.TopLeft, new Vector2(0, 1), new Vector2(1, 1), new Vector2(40, -60), new Vector2(-40, -20));
-            portal.introTitle = Txt(intro, "Titulo", "ESCENARIO 05", 54, Ink, TextAlignmentOptions.TopLeft, new Vector2(0, 1), new Vector2(1, 1), new Vector2(40, -200), new Vector2(-40, -70));
-            portal.introBody = Txt(intro, "Historia", "", 30, Ink, TextAlignmentOptions.TopLeft, new Vector2(0, 0), new Vector2(1, 1), new Vector2(40, 200), new Vector2(-40, -210));
+            portal.introTitle = Txt(intro, "Titulo", "ESCENARIO 05", 50, Ink, TextAlignmentOptions.TopLeft, new Vector2(0, 1), new Vector2(1, 1), new Vector2(40, -215), new Vector2(-40, -75));
+            portal.introTitle.enableAutoSizing = true; portal.introTitle.fontSizeMin = 36; portal.introTitle.fontSizeMax = 50;
+            portal.introTitle.fontStyle = FontStyles.Bold;
+            portal.introBody = Txt(intro, "Historia", "", 30, Ink, TextAlignmentOptions.TopLeft, new Vector2(0, 0), new Vector2(1, 1), new Vector2(40, 190), new Vector2(-40, -235));
+            portal.introBody.enableAutoSizing = true; portal.introBody.fontSizeMin = 22; portal.introBody.fontSizeMax = 30;
+            portal.introBody.paragraphSpacing = 22;
             var bAtk = GazeButton(intro, "MODO ATAQUE 2016", new Color(0.45f, 0.08f, 0.06f), new Vector2(-370, -400), new Vector2(640, 140), 44);
             var bDef = GazeButton(intro, "MODO DEFENSA", new Color(0.05f, 0.35f, 0.2f), new Vector2(370, -400), new Vector2(640, 140), 44);
             UnityEventTools.AddPersistentListener(bAtk.onClick, new UnityAction(portal.ChooseAttack));
@@ -523,6 +527,11 @@ namespace AndesSim.EditorTools
             t.text = text; t.fontSize = size; t.color = c; t.alignment = align;
             t.textWrappingMode = TextWrappingModes.Normal;
             t.raycastTarget = false;
+            // Más aire entre letras, palabras y líneas: se lee mejor en VR.
+            t.characterSpacing = 2f;
+            t.wordSpacing = 8f;
+            t.lineSpacing = 12f;
+            t.paragraphSpacing = 10f;
             return t;
         }
 

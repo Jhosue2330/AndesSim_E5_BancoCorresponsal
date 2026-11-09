@@ -16,6 +16,8 @@ namespace AndesSim
         public LayerMask layerMask = ~0;
         [Tooltip("0 = desactivado")]
         public float dwellSeconds = 2f;
+        [Tooltip("En el Editor sin visor, apuntar con el cursor del mouse en vez del centro de la cámara.")]
+        public bool useMouseInEditor = true;
 
         [Header("Retícula")]
         public float reticleRestDistance = 3f;
@@ -55,7 +57,11 @@ namespace AndesSim
 
         void Update()
         {
-            var ray = new Ray(transform.position, transform.forward);
+            // En el Editor (sin visor XR) se apunta con el mouse; en el celular, con la mirada.
+            bool mouseMode = useMouseInEditor && Application.isEditor && !UnityEngine.XR.XRSettings.isDeviceActive;
+            var ray = mouseMode ? cam.ScreenPointToRay(MousePosition()) : new Ray(transform.position, transform.forward);
+            ring.enabled = !mouseMode;
+            if (mouseMode) progress.enabled = false;
             GameObject hitObj = null;
             float dist = reticleRestDistance;
             if (Physics.Raycast(ray, out var hit, maxDistance, layerMask, QueryTriggerInteraction.Collide))
@@ -81,7 +87,7 @@ namespace AndesSim
             if (canInteract)
             {
                 if (ClickPressed()) Click();
-                bool dwellAllowed = dwellSeconds > 0f && gazedInteractable.allowDwell;
+                bool dwellAllowed = !mouseMode && dwellSeconds > 0f && gazedInteractable.allowDwell;
                 if (dwellAllowed && !dwellFired)
                 {
                     gazeTime += Time.deltaTime;
@@ -90,7 +96,16 @@ namespace AndesSim
                 }
             }
 
-            DrawReticle(dist, canInteract, dwellProgress);
+            if (!mouseMode) DrawReticle(dist, canInteract, dwellProgress);
+        }
+
+        static Vector3 MousePosition()
+        {
+#if ENABLE_LEGACY_INPUT_MANAGER
+            return Input.mousePosition;
+#else
+            return new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f);
+#endif
         }
 
         void Click()
