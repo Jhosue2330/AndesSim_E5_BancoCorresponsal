@@ -1,0 +1,73 @@
+{
+  "items": [
+    {
+      "objeto": "Mesa",
+      "modelo": "desk.fbx",
+      "tamano": [2.4, 0.8, 1.0],
+      "rotacionY": 0,
+      "nota": "Escritorio de oficina con cajonera para el puesto de trabajo de la analista."
+    },
+    {
+      "objeto": "Mueble",
+      "modelo": "cabinetTelevisionDoors.fbx",
+      "tamano": [2.8, 1.1, 0.6],
+      "rotacionY": 0,
+      "nota": "Mueble bajo con puertas frontales que sirve de base para los controles del panel de defensas."
+    },
+    {
+      "objeto": "Telefono",
+      "modelo": null,
+      "tamano": [0.36, 0.14, 0.3],
+      "rotacionY": 0,
+      "nota": "El Furniture Kit no incluye teléfono de oficina; se mantiene null para conservar el teléfono interactivo y su auricular animable."
+    },
+    {
+      "objeto": "Deco_Silla",
+      "modelo": "chairDesk.fbx",
+      "tamano": [0.6, 1.0, 0.6],
+      "posicion": [4.4, 0, -1.0],
+      "rotacionY": 90,
+      "nota": "Silla de escritorio giratoria con reposabrazos, orientada hacia el escritorio de la analista."
+    },
+    {
+      "objeto": "Deco_Monitor",
+      "modelo": "computerScreen.fbx",
+      "tamano": [0.6, 0.45, 0.25],
+      "posicion": [5.72, 0.8, -1.1],
+      "rotacionY": 90,
+      "nota": "Monitor plano de terminal SWIFT al fondo del escritorio, orientado hacia la analista (x=5.72 para no tapar la Lista de sanciones)."
+    },
+    {
+      "objeto": "Deco_Papelera",
+      "modelo": "trashcan.fbx",
+      "tamano": [0.35, 0.5, 0.35],
+      "posicion": [5.4, 0, -2.5],
+      "rotacionY": 0,
+      "nota": "Papelera de oficina metálica junto al lateral del escritorio."
+    },
+    {
+      "objeto": "Deco_Planta",
+      "modelo": "pottedPlant.fbx",
+      "tamano": [0.5, 1.1, 0.5],
+      "posicion": [-5.6, 0, -2.8],
+      "rotacionY": 0,
+      "nota": "Planta decorativa en maceta para ambientar la sala de monitoreo."
+    },
+    {
+      "objeto": "Deco_LamparaPie",
+      "modelo": "lampRoundFloor.fbx",
+      "tamano": [0.4, 1.6, 0.4],
+      "posicion": [6.2, 0, -2.4],
+      "rotacionY": 0,
+      "nota": "Lámpara de pie de iluminación auxiliar junto a la zona del calendario y escritorio."
+    },
+    {
+      "objeto": "Deco_Estanteria",
+      "modelo": "bookcaseClosedWide.fbx",
+      "tamano": [1.6, 1.8, 0.5],
+      "posicion": [-6.6, 0, -3.8],
+      "rotacionY": 90,
+      "nota": "Estantería archivadora de documentación bancaria y manuales regulatorios contra la pared oeste."
+    }
+  ]
+}

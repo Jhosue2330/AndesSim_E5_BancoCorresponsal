@@ -208,9 +208,9 @@ namespace AndesSim.EditorTools
             panelRoot.position = new Vector3(-5.6f, 0, -1f);
             panelRoot.rotation = Quaternion.Euler(0, -90, 0); // mira hacia el centro
             Prim(PrimitiveType.Cube, "Mueble", panelRoot, panelRoot.TransformPoint(new Vector3(0, 0.55f, 0.3f)), new Vector3(2.8f, 1.1f, 0.6f), mDesk, panelRoot.eulerAngles);
-            var panelCanvas = MakeCanvas("Rotulo_Panel", panelRoot, panelRoot.TransformPoint(new Vector3(0, 2.1f, 0.55f)), panelRoot.rotation, new Vector2(1400, 520), 0.002f);
+            var panelCanvas = MakeCanvas("Rotulo_Panel", panelRoot, panelRoot.TransformPoint(new Vector3(0, 2.35f, 0.55f)), panelRoot.rotation, new Vector2(1400, 130), 0.002f);
             Img(panelCanvas, "Fondo", PanelBg, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
-            Txt(panelCanvas, "Titulo", "PANEL DE CONTROLES · DEFENSAS", 48, Green, TextAlignmentOptions.Top, Vector2.zero, Vector2.one, new Vector2(20, 20), new Vector2(-20, -20));
+            Txt(panelCanvas, "Titulo", "PANEL DE CONTROLES · DEFENSAS", 48, Green, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, new Vector2(20, 0), new Vector2(-20, 0));
             string[,] defs =
             {
                 { CallbackDefense.Contacts247, "Contactos 24/7", "El BANCO ANDINO registra una línea de incidentes que atiende las 24 horas, los 7 días. Ya no importa que sea fin de semana." },
@@ -232,7 +232,8 @@ namespace AndesSim.EditorTools
                 var dc = sw.AddComponent<DefenseControl>();
                 dc.defenseId = defs[i, 0]; dc.title = defs[i, 1]; dc.description = defs[i, 2];
                 dc.lever = pivot; dc.leverOnEuler = new Vector3(-40, 0, 0);
-                var lbl = MakeCanvas("Etiqueta", panelRoot, panelRoot.TransformPoint(new Vector3(x, 1.55f, 0.55f)), panelRoot.rotation, new Vector2(420, 120), 0.002f);
+                var lbl = MakeCanvas("Etiqueta", panelRoot, panelRoot.TransformPoint(new Vector3(x, 1.95f, 0.45f)), panelRoot.rotation, new Vector2(430, 130), 0.002f);
+                Img(lbl, "Fondo", PanelBg, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
                 Txt(lbl, "Texto", defs[i, 1].ToUpperInvariant(), 34, Ink, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             }
             var manual = Prim(PrimitiveType.Cube, "Manual_Reglas", panelRoot, panelRoot.TransformPoint(new Vector3(1.2f, 1.13f, 0.15f)), new Vector3(0.3f, 0.06f, 0.4f), mPaper, panelRoot.eulerAngles);
@@ -333,6 +334,9 @@ namespace AndesSim.EditorTools
             UnityEventTools.AddPersistentListener(rAtk.onClick, new UnityAction(gm.RestartAttack));
             UnityEventTools.AddPersistentListener(rDef.onClick, new UnityAction(gm.RestartDefense));
             ui.endScreenRoot = end.gameObject;
+
+            // ---------- modelos 3D (Assets/_AndesSim/Art/modelos.json) ----------
+            ModelPlacer.Apply();
 
             // ---------- guardar ----------
             EditorSceneManager.SaveScene(scene, ScenePath);

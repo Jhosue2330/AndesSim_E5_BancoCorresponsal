@@ -12,18 +12,18 @@ Regla: no tocar archivos de una tarea `EN CURSO` de otro agente.
 | 3 | Interacción por mirada + teletransporte + portal de entrada | Claude | HECHO |
 | 4 | Lógica escenario 5 (OrderFeed, SanctionsMatcher, CallbackDefense, ResultPanel) | Claude | HECHO |
 | 5 | Menú `AndesSim > Construir escena Escenario 5` (escena con primitivas) | Claude | HECHO |
-| 6 | Instalar módulo **Android Build Support** en Unity Hub para 6000.0.85f2 | Humano | PENDIENTE |
-| 7 | Instalar **Cardboard XR Plugin** y configurar XR Plug-in Management (Android) | Humano | PENDIENTE |
+| 6 | Instalar módulo **Android Build Support** en Unity Hub para 6000.0.85f2 | Humano | HECHO |
+| 7 | Instalar **Cardboard XR Plugin** y configurar XR Plug-in Management (Android) | Claude | HECHO |
 
 ## Sprint 2 · Arte, sonido y pulido
 
 | # | Tarea | Dueño | Estado |
 |---|---|---|---|
-| 8 | Reemplazar primitivas por modelos libres: sala de monitoreo, escritorios, teléfono, pantallas curvas | Antigravity | PENDIENTE |
+| 8 | Reemplazar primitivas por modelos libres: sala de monitoreo, escritorios, teléfono, pantallas curvas | Antigravity | HECHO |
 | 9 | Audios: ambiente de sala, alarma, teléfono sonando, tono de llamada, clic de mirada (CC0) → asignar en `AudioManager` | Antigravity | HECHO |
 | 10 | Pulir UI de pantallas (fuentes, colores estilo terminal verde/rojo, legibilidad en VR) | Antigravity | PENDIENTE |
 | 11 | Texto de créditos completo (autores, licencias, IA usadas) en `ScenarioData.credits` | Antigravity | HECHO |
-| 12 | Probar en celular, ajustar escala de textos y distancia de pantallas | Humano | PENDIENTE |
+| 12 | Probar en celular, ajustar escala de textos y distancia de pantallas | Humano | HECHO (Redmi Note 14: cabeza, textos, selección y sonido OK) |
 
 ## Sprint 3 · Entrega
 
