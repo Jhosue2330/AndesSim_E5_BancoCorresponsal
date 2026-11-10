@@ -55,9 +55,18 @@ namespace AndesSim.Scenario05
             credits =
                 "ANDES-SIM · Escenario 5 · Banco Corresponsal Internacional\n" +
                 "Basado en hechos reales (Banco de Bangladesh, 2016). Entidades y personas ficticias.\n" +
-                "Equipo: (completar nombres y roles)\n" +
-                "Modelos 3D: (autor · licencia · enlace)\n" +
-                "Audio: tonos generados por código (AudioManager) / (autor · licencia)\n" +
+                "Equipo:\n" +
+                "- Meza Miranda Jhosue Alejandro · Líder de proyecto, analista de ciberseguridad y QA\n" +
+                "- Limache Cunyas Noemi Cielo · Desarrollo Unity (C#)\n" +
+                "- Castro Inga Anyeli Eliana · Arte 3D, UI y sonido\n" +
+                "Modelos 3D: \"Furniture Kit\" · Kenney (kenney.nl) · CC0\n" +
+                "Audio (Freesound, licencia CC0 1.0):\n" +
+                "- \"Server Room Ambience\" · SoundDesignForYou · freesound.org/s/646682\n" +
+                "- \"Digital Alarm Loop.wav\" · bbrocer · freesound.org/s/389511\n" +
+                "- \"phone ringing.mp3\" · Rebecca_f · freesound.org/s/425660\n" +
+                "- \"Busy Signal\" · ramicio · freesound.org/s/158428\n" +
+                "- \"Soft UI Button Click\" · Jummit · freesound.org/s/528561\n" +
+                "- \"Phone pick up / hang up\" · deraj · freesound.org/s/218083\n" +
                 "Herramientas de IA usadas: Claude Code (Anthropic), Google Antigravity.";
 
             orders = new List<OrderInfo>();

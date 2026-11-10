@@ -322,15 +322,19 @@ namespace AndesSim.EditorTools
             ui.toastRoot = toast;
 
             // ---------- pantalla final ----------
-            var end = MakeCanvas("UI_PantallaFinal", null, new Vector3(0, 1.6f, 2), Quaternion.identity, new Vector2(1500, 1100), 0.0018f);
+            var end = MakeCanvas("UI_PantallaFinal", null, new Vector3(0, 1.6f, 2), Quaternion.identity, new Vector2(1900, 1250), 0.0017f);
             Img(end, "Borde", Amber, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             Img(end, "Fondo", new Color(0.01f, 0.04f, 0.03f, 0.98f), Vector2.zero, Vector2.one, new Vector2(5, 5), new Vector2(-5, -5));
             ui.endTitle = Txt(end, "Titulo", "RESULTADO", 56, Amber, TextAlignmentOptions.Top, new Vector2(0, 1), new Vector2(1, 1), new Vector2(30, -110), new Vector2(-30, -30));
-            ui.endBody = Txt(end, "Cuerpo", "", 32, Ink, TextAlignmentOptions.TopLeft, new Vector2(0, 0.38f), new Vector2(1, 1), new Vector2(40, 0), new Vector2(-40, -120));
+            ui.endBody = Txt(end, "Cuerpo", "", 32, Ink, TextAlignmentOptions.TopLeft, new Vector2(0, 0.16f), new Vector2(0.56f, 1), new Vector2(40, 0), new Vector2(-20, -120));
             ui.endBody.enableAutoSizing = true; ui.endBody.fontSizeMin = 20; ui.endBody.fontSizeMax = 32;
-            ui.endCredits = Txt(end, "Creditos", "", 20, new Color(0.6f, 0.7f, 0.65f), TextAlignmentOptions.TopLeft, new Vector2(0, 0.16f), new Vector2(1, 0.38f), new Vector2(40, 0), new Vector2(-40, -10));
-            var rAtk = GazeButton(end, "REPETIR · ATAQUE 2016", new Color(0.45f, 0.08f, 0.06f), new Vector2(-370, -460), new Vector2(640, 120), 38);
-            var rDef = GazeButton(end, "REPETIR · DEFENSA", new Color(0.05f, 0.35f, 0.2f), new Vector2(370, -460), new Vector2(640, 120), 38);
+            Img(end, "Separador", new Color(0.22f, 0.95f, 0.54f, 0.35f), new Vector2(0.565f, 0.17f), new Vector2(0.565f, 1), new Vector2(-2, 0), new Vector2(2, -125));
+            Txt(end, "CreditosTitulo", "CRÉDITOS", 30, Green, TextAlignmentOptions.TopLeft, new Vector2(0.58f, 1), new Vector2(1, 1), new Vector2(10, -170), new Vector2(-40, -120));
+            ui.endCredits = Txt(end, "Creditos", data.credits, 22, new Color(0.75f, 0.85f, 0.8f), TextAlignmentOptions.TopLeft, new Vector2(0.58f, 0.16f), new Vector2(1, 1), new Vector2(10, 0), new Vector2(-40, -175));
+            ui.endCredits.enableAutoSizing = false; ui.endCredits.fontSize = 28;
+            ui.endCredits.lineSpacing = 2f; ui.endCredits.characterSpacing = 0.5f;
+            var rAtk = GazeButton(end, "REPETIR · ATAQUE 2016", new Color(0.45f, 0.08f, 0.06f), new Vector2(-370, -540), new Vector2(640, 120), 38);
+            var rDef = GazeButton(end, "REPETIR · DEFENSA", new Color(0.05f, 0.35f, 0.2f), new Vector2(370, -540), new Vector2(640, 120), 38);
             UnityEventTools.AddPersistentListener(rAtk.onClick, new UnityAction(gm.RestartAttack));
             UnityEventTools.AddPersistentListener(rDef.onClick, new UnityAction(gm.RestartDefense));
             ui.endScreenRoot = end.gameObject;

@@ -22,6 +22,7 @@ namespace AndesSim.EditorTools
             ("04_panel_defensas", new Vector3(-3.8f, 1.6f, -1f), new Vector3(-5.8f, 1.2f, -1.2f)),
             ("05_vista_general", new Vector3(-0.5f, 3.6f, -5.6f), new Vector3(0.5f, 0.8f, 1.5f)),
             ("06_esquina_oeste", new Vector3(-3.0f, 1.6f, -1.5f), new Vector3(-6.5f, 0.9f, -3.5f)),
+            ("07_pantalla_final", new Vector3(0, 1.6f, -0.6f), new Vector3(0, 1.6f, 2f)),
         };
 
         [MenuItem("AndesSim/7. Sacar capturas de la escena (Docs/capturas)", priority = 7)]
