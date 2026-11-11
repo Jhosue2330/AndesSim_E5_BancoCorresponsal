@@ -38,6 +38,7 @@ namespace AndesSim.Scenario05
                 sb.AppendLine("<color=#ff5a4e>Así pasó en 2016:</color> la alerta «JUPITER» congeló 30 órdenes, pero 5 ya se habían pagado " +
                               "(4 a Manila por US$81 M y 1 a la «Fandation» por US$20 M). Nadie contestó en el BANCO ANDINO: era fin de semana.");
                 sb.AppendLine("<b>Vulnerabilidades:</b> contactos solo en días hábiles · sin confirmación por canal alterno · sin reglas por destino ni monto.");
+                sb.AppendLine("<color=#ffc24a>Mira «VER ANÁLISIS» para entender por qué funcionó el ataque.</color>");
             }
             else
             {

@@ -333,11 +333,38 @@ namespace AndesSim.EditorTools
             ui.endCredits = Txt(end, "Creditos", data.credits, 22, new Color(0.75f, 0.85f, 0.8f), TextAlignmentOptions.TopLeft, new Vector2(0.58f, 0.16f), new Vector2(1, 1), new Vector2(10, 0), new Vector2(-40, -175));
             ui.endCredits.enableAutoSizing = false; ui.endCredits.fontSize = 28;
             ui.endCredits.lineSpacing = 2f; ui.endCredits.characterSpacing = 0.5f;
-            var rAtk = GazeButton(end, "REPETIR · ATAQUE 2016", new Color(0.45f, 0.08f, 0.06f), new Vector2(-370, -540), new Vector2(640, 120), 38);
-            var rDef = GazeButton(end, "REPETIR · DEFENSA", new Color(0.05f, 0.35f, 0.2f), new Vector2(370, -540), new Vector2(640, 120), 38);
+            var rAtk = GazeButton(end, "REPETIR · ATAQUE 2016", new Color(0.45f, 0.08f, 0.06f), new Vector2(-610, -540), new Vector2(560, 120), 34);
+            var rAna = GazeButton(end, "VER ANÁLISIS", new Color(0.42f, 0.30f, 0.04f), new Vector2(0, -540), new Vector2(560, 120), 38);
+            var rDef = GazeButton(end, "REPETIR · DEFENSA", new Color(0.05f, 0.35f, 0.2f), new Vector2(610, -540), new Vector2(560, 120), 34);
             UnityEventTools.AddPersistentListener(rAtk.onClick, new UnityAction(gm.RestartAttack));
             UnityEventTools.AddPersistentListener(rDef.onClick, new UnityAction(gm.RestartDefense));
             ui.endScreenRoot = end.gameObject;
+
+            // ---------- pantalla de ANÁLISIS (Ataque → Análisis → Defensa) ----------
+            var ana = MakeCanvas("UI_Analisis", null, new Vector3(20, 1.6f, 2), Quaternion.identity, new Vector2(1900, 1250), 0.0017f);
+            var analysis = feedGo.AddComponent<AnalysisPanel>();
+            analysis.root = ana.gameObject;
+            UnityEventTools.AddPersistentListener(rAna.onClick, new UnityAction(analysis.Show));
+            Img(ana, "Borde", Amber, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            Img(ana, "Fondo", new Color(0.01f, 0.04f, 0.03f, 0.98f), Vector2.zero, Vector2.one, new Vector2(5, 5), new Vector2(-5, -5));
+            Txt(ana, "Titulo", "ANÁLISIS TÉCNICO · ¿POR QUÉ FUNCIONÓ EL ATAQUE?", 50, Amber, TextAlignmentOptions.Top, new Vector2(0, 1), new Vector2(1, 1), new Vector2(30, -110), new Vector2(-30, -30));
+            AnalysisCard(ana, "Card_Vector", new Vector2(0.02f, 0.54f), new Vector2(0.49f, 0.89f), Red,
+                "VECTOR DE ATAQUE",
+                "Lazarus envió órdenes SWIFT (MT103) desde la terminal del BANCO ANDINO con credenciales robadas. Para el corresponsal eran válidas: origen, formato y firma correctos.\n<color=#7dffb0>Defensa →</color> verificar órdenes inusuales fuera de banda.");
+            AnalysisCard(ana, "Card_Reglas", new Vector2(0.51f, 0.54f), new Vector2(0.98f, 0.89f), Red,
+                "FALLA 1 · SIN REGLAS DE MONTO",
+                "Solo se revisaba el formato y la lista de sanciones. Pagos de US$6 a 30 M a beneficiarios nunca usados no generaban alerta: por eso las 5 primeras órdenes (US$101 M) se pagaron.\n<color=#7dffb0>Defensa →</color> Reglas destino y monto.");
+            AnalysisCard(ana, "Card_Jupiter", new Vector2(0.02f, 0.17f), new Vector2(0.49f, 0.52f), Amber,
+                "FALLA 2 · DETECCIÓN POR CASUALIDAD",
+                "Las otras 30 órdenes se frenaron por una coincidencia de texto: «Calle Jupiter» = petrolero sancionado «JUPITER». El screening busca palabras, no fraude; sin esa calle, nada las detenía.\n<color=#7dffb0>Defensa →</color> monitoreo transaccional, no solo listas.");
+            AnalysisCard(ana, "Card_Contacto", new Vector2(0.51f, 0.17f), new Vector2(0.98f, 0.52f), Red,
+                "FALLA 3 · NADIE PUDO CONFIRMAR",
+                "El ataque empezó un jueves de noche. El BANCO ANDINO solo atendía en días hábiles y las consultas iban por el mismo canal SWIFT comprometido: el sábado nadie contestó.\n<color=#7dffb0>Defensa →</color> Contactos 24/7 + Número registrado.");
+            Txt(ana, "Conclusion", "Conclusión: el ataque no rompió ningún control del corresponsal, aprovechó que no existían. En el modo Defensa se activan los 3 controles.", 28, Ink, TextAlignmentOptions.Center, new Vector2(0, 0.095f), new Vector2(1, 0.165f), new Vector2(40, 0), new Vector2(-40, 0));
+            var aBack = GazeButton(ana, "VOLVER AL RESULTADO", new Color(0.18f, 0.22f, 0.2f), new Vector2(-400, -560), new Vector2(640, 100), 34);
+            var aDef = GazeButton(ana, "VER LA DEFENSA ›", new Color(0.05f, 0.35f, 0.2f), new Vector2(400, -560), new Vector2(640, 100), 38);
+            UnityEventTools.AddPersistentListener(aBack.onClick, new UnityAction(analysis.Back));
+            UnityEventTools.AddPersistentListener(aDef.onClick, new UnityAction(gm.RestartDefense));
 
             // ---------- modelos 3D (Assets/_AndesSim/Art/modelos.json) ----------
             ModelPlacer.Apply();
@@ -569,6 +596,16 @@ namespace AndesSim.EditorTools
             var c = MakeCanvas("Etiqueta_" + name, go.transform.parent, pos + new Vector3(0, 0.35f, 0), labelRot, new Vector2(500, 80), 0.002f);
             Txt(c, "Texto", label.ToUpperInvariant(), 34, Green, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             return tp;
+        }
+
+        static void AnalysisCard(Transform canvas, string name, Vector2 aMin, Vector2 aMax, Color accent, string title, string body)
+        {
+            var card = Rect(canvas, name, aMin, aMax, Vector2.zero, Vector2.zero);
+            Img(card, "Borde", new Color(accent.r, accent.g, accent.b, 0.55f), Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            Img(card, "Fondo", new Color(0.03f, 0.08f, 0.06f, 1f), Vector2.zero, Vector2.one, new Vector2(3, 3), new Vector2(-3, -3));
+            Txt(card, "Titulo", title, 36, accent, TextAlignmentOptions.TopLeft, new Vector2(0, 1), new Vector2(1, 1), new Vector2(28, -78), new Vector2(-28, -20));
+            var t = Txt(card, "Texto", body, 36, Ink, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, new Vector2(28, 20), new Vector2(-28, -92));
+            t.enableAutoSizing = true; t.fontSizeMin = 24; t.fontSizeMax = 36; t.fontSize = 36;
         }
 
         static RectTransform MakeCanvas(string name, Transform parent, Vector3 pos, Quaternion rot, Vector2 sizePx, float metersPerPx)
