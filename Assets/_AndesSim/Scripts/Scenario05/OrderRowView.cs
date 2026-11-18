@@ -69,13 +69,34 @@ namespace AndesSim.Scenario05
 
         protected override void Entered()
         {
-            if (order != null && !string.IsNullOrEmpty(order.flagReason) && order.status == OrderStatus.EnRevision)
-                UIManager.Msg($"ORDEN #{order.number:00} · {order.AmountText}", order.flagReason + "\nToca para BLOQUEAR.", 3f);
+            if (order == null || order.status == OrderStatus.EnTransito || order.status == OrderStatus.NoReenviada) return;
+            UIManager.Msg($"EXPEDIENTE · ORDEN #{order.number:00} · {order.AmountText}", Dossier(), 4f);
         }
+
+        /// <summary>Ficha de la orden con sus "banderas rojas" (lo que un analista debería notar).</summary>
+        string Dossier()
+        {
+            var flags = new System.Collections.Generic.List<string> { "beneficiario nunca usado" };
+            if (order.amountMillions >= 5f) flags.Add("monto inusual para una persona o fundación");
+            if (order.address.ToUpperInvariant().Contains("JUPITER")) flags.Add("«JUPITER» en la dirección (lista de sanciones)");
+            if (order.beneficiary.ToUpperInvariant().Contains("FANDATION")) flags.Add("nombre mal escrito: «FANDATION»");
+            string action = order.status == OrderStatus.EnRevision ? $"<color={W}>›› Toca para BLOQUEAR</color>"
+                : IsFandation ? $"<color={W}>›› Toca para examinar el nombre con la LUPA</color>" : "";
+            return $"<b>{order.beneficiary}</b> · {order.beneficiaryBank}\n{order.address} ({order.country})\n" +
+                   $"<color={Palette.Hex(Palette.Threat)}>Banderas rojas:</color> " + string.Join(" · ", flags) + "\n" + action;
+        }
+
+        bool IsFandation => order != null && order.beneficiary.ToUpperInvariant().Contains("FANDATION");
 
         protected override void Clicked()
         {
-            if (feed != null && order != null) feed.PlayerBlock(order);
+            if (order == null) return;
+            if (IsFandation && order.status != OrderStatus.EnRevision && order.status != OrderStatus.EnTransito && FandationGame.I != null)
+            {
+                FandationGame.I.Open(order);
+                return;
+            }
+            if (feed != null) feed.PlayerBlock(order);
         }
     }
 }

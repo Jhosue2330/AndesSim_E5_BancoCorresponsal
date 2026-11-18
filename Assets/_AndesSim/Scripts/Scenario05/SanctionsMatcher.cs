@@ -26,6 +26,8 @@ namespace AndesSim.Scenario05
             $"La dirección del beneficiario «{order.address}» contiene «{term}», el nombre de un petrolero " +
             "que figura en una lista de sanciones. El sistema de screening detiene la orden para revisión.\n" +
             "<color=#ffc24a>Ojo:</color> fue una coincidencia de texto con la calle, no una regla contra fraude. " +
-            "Las 5 órdenes anteriores no tenían esa palabra y ya se pagaron.";
+            (GameManager.I != null && GameManager.I.mode == SimMode.Defensa
+                ? "Las 5 órdenes anteriores no tenían esa palabra: las retuvieron tus reglas de destino y monto."
+                : "Las 5 órdenes anteriores no tenían esa palabra y ya se pagaron.");
     }
 }

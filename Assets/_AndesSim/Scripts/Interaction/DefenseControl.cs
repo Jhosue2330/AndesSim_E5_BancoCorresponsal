@@ -53,8 +53,9 @@ namespace AndesSim
                 StartCoroutine(Ease.Tween(0.45f, k => lever.localRotation = Quaternion.SlerpUnclamped(from, to, k), Ease.OutBack));
             }
             if (onIndicator) onIndicator.SetActive(true);
-            AudioManager.P(Sfx.Defense);
-            AudioManager.P(Sfx.Shield, 0.6f);
+            AudioManager.At(Sfx.Defense, transform.position, 1.2f);
+            AudioManager.At(Sfx.Shield, transform.position, 0.8f);
+            Haptics.Confirm();
             Vector3 top = GetComponent<Collider>().bounds.center + Vector3.up * 0.35f;
             FxManager.I?.Burst(top, Palette.Secure, 20, 1.6f);
             var gm = GameManager.I;

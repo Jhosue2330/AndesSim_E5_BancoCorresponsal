@@ -84,7 +84,7 @@ namespace AndesSim.Scenario05
 
                 o.status = OrderStatus.EnTransito;
                 CreateRow(o, shown++);
-                AudioManager.P(Sfx.OrderIn, 0.6f);
+                AudioManager.At(Sfx.OrderIn, ScreenPosition(shown - 1), 0.8f);
                 OrderArrived?.Invoke(o);
 
                 string term = matcher ? matcher.Match(o, data.sanctionsList) : null;
@@ -155,6 +155,7 @@ namespace AndesSim.Scenario05
                     bool byRule = o.flagReason != null && o.flagReason.StartsWith("Regla");
                     SetStatus(o, byRule ? OrderStatus.Retenida : OrderStatus.Bloqueada);
                     AudioManager.P(Sfx.Defense, 0.6f);
+                    Haptics.Confirm();
                     break;
                 case OrderStatus.EnTransito:
                     UIManager.Msg($"ORDEN #{o.number:00} · SIN ALERTA",
@@ -188,6 +189,13 @@ namespace AndesSim.Scenario05
         }
 
         public void SetSimTime(DateTime t) { simTime = t; UpdateTexts(); }
+
+        /// <summary>Posición en el mundo de la pantalla donde cae la fila n (para el sonido 3D).</summary>
+        public Vector3 ScreenPosition(int index)
+        {
+            int i = Mathf.Clamp(index / Mathf.Max(1, rowsPerScreen), 0, screens.Length - 1);
+            return screens[i] ? screens[i].position : transform.position;
+        }
 
         void SetStatus(OrderInfo o, OrderStatus s)
         {

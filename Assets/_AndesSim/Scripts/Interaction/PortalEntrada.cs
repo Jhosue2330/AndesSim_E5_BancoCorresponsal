@@ -13,6 +13,9 @@ namespace AndesSim
         public TMP_Text introTitle;
         public TMP_Text introBody;
         public TeleportPoint destination;
+        [Tooltip("Opcional: ascensor de llegada (si está, el portal lleva primero al ascensor).")]
+        public ElevatorRide elevator;
+        public Transform playerRig;
         [Tooltip("Efecto visual del portal (se anima al cruzar).")]
         public Transform portalRing;
         public float spinSpeed = 30f;
@@ -65,8 +68,18 @@ namespace AndesSim
             AudioManager.P(Sfx.Whoosh);
             FxManager.I?.Burst(portalRing ? portalRing.position : transform.position, Palette.Violet, 40, 3f);
             yield return new WaitForSeconds(crossDelay);
+            if (elevator && playerRig)
+            {
+                // Portal → ascensor (fundido) → subida → puertas abiertas → sala
+                yield return FxManager.I != null ? FxManager.I.FadeThrough(() =>
+                {
+                    playerRig.position = elevator.Stand;
+                    playerRig.rotation = elevator.FacingDoors;
+                }, 0.25f, 0.6f) : null;
+                yield return elevator.Ride(playerRig);
+            }
             if (destination) destination.TeleportHere();
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.6f);
             GameManager.I?.BeginScenario();
             Crossed?.Invoke();
         }

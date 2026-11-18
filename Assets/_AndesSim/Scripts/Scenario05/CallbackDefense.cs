@@ -21,6 +21,8 @@ namespace AndesSim.Scenario05
         public float ringSeconds = 2f;
         [Tooltip("Parte que se levanta al llamar (auricular).")]
         public Transform handset;
+        [Tooltip("Diálogo con opciones (si no hay, la verificación es automática).")]
+        public DialogChoices dialog;
 
         public bool Calling { get; private set; }
         public bool CallDone { get; private set; }
@@ -52,7 +54,8 @@ namespace AndesSim.Scenario05
             int n = has247 && hasRegistered ? 2 : rings;
             for (int i = 0; i < n; i++)
             {
-                AudioManager.P(Sfx.PhoneRing);
+                AudioManager.At(Sfx.PhoneRing, transform.position);
+                Haptics.Ring();
                 // El teléfono vibra mientras suena (1 s) y luego descansa.
                 float t0 = Time.time;
                 while (Time.time - t0 < ringSeconds)
@@ -68,17 +71,20 @@ namespace AndesSim.Scenario05
             Verified = has247 && hasRegistered;
             if (Verified)
             {
-                AudioManager.P(Sfx.PhoneAnswer);
+                AudioManager.At(Sfx.PhoneAnswer, transform.position);
+                Haptics.Confirm();
+                if (dialog) yield return Conversation();
                 int recalled = feed ? feed.RecallAfterVerification() : 0;
                 AmbienceController.Set(RoomMood.Secure);
                 FxManager.I?.Burst(top, Palette.Secure, 30, 2f);
                 FxManager.Float(top, "FRAUDE CONFIRMADO · ÓRDENES RETENIDAS", Palette.Secure);
                 UIManager.Msg("VERIFICACIÓN COMPLETADA",
-                    (data ? data.callVerifiedText : "Órdenes retenidas.") + $"\n({recalled} órdenes cambiaron a RETENIDA)", 8f);
+                    (data ? data.callVerifiedText : "Órdenes retenidas.") + (recalled > 0 ? $"\n({recalled} órdenes pagadas volvieron a RETENIDA)" : "\n(Tus reglas ya las tenían retenidas: la llamada confirma el fraude.)"), 8f);
             }
             else
             {
-                AudioManager.P(Sfx.PhoneNoAnswer);
+                AudioManager.At(Sfx.PhoneNoAnswer, transform.position);
+                Haptics.Warn();
                 AmbienceController.Set(RoomMood.Danger);
                 FxManager.Float(top, "SIN RESPUESTA · FIN DE SEMANA", Palette.Threat);
                 string why = data ? data.callNoAnswerText : "Nadie contesta.";
@@ -90,10 +96,38 @@ namespace AndesSim.Scenario05
                 UIManager.Msg("SIN RESPUESTA", why, 8f);
             }
 
+            if (dialog) dialog.Hide();
             if (handset) handset.localPosition = handsetPos;
             Calling = false;
             CallDone = true;
             CallFinished?.Invoke(Verified);
+        }
+
+        /// <summary>
+        /// Conversación con la línea 24/7: el jugador elige qué preguntar. Retener todo cierra la llamada.
+        /// </summary>
+        IEnumerator Conversation()
+        {
+            const string who = "LÍNEA 24/7 · BANCO ANDINO";
+            bool askedOrders = false, askedFandation = false;
+            string[] options =
+            {
+                "¿Ustedes autorizaron 36 órdenes por US$951 M?",
+                "¿«SHALIKA FANDATION» es cliente suyo?",
+                "Retengan y anulen todo. Confirmamos por escrito."
+            };
+            string text = "Línea de incidentes del BANCO ANDINO, buenas noches. ¿En qué podemos ayudar?";
+            while (true)
+            {
+                int pick = -1;
+                yield return dialog.Ask(who, text, options, i => pick = i);
+                AudioManager.P(Sfx.Click);
+                if (pick == 0) { askedOrders = true; text = "No. Nuestra mesa de pagos no emitió ninguna orden esta noche. Esas órdenes NO son nuestras."; }
+                else if (pick == 1) { askedFandation = true; text = "No existe en nuestros registros… y «Fandation» está mal escrito. Es una señal clara de fraude."; }
+                else break;
+            }
+            if (askedOrders && askedFandation) Achievements.Unlock("preguntas");
+            yield return dialog.Say(who, "Entendido: retengan todo. Enviamos la confirmación por el canal registrado.", 2.5f);
         }
     }
 }

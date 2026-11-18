@@ -23,6 +23,10 @@ namespace AndesSim.EditorTools
             ("05_vista_general", new Vector3(-0.5f, 3.6f, -5.6f), new Vector3(0.5f, 0.8f, 1.5f)),
             ("06_ventanal_ciudad", new Vector3(0f, 1.6f, -0.5f), new Vector3(0f, 1.5f, -6f)),
             ("09_mesa_holografica", new Vector3(0f, 1.6f, -0.5f), new Vector3(0f, 0.9f, 2.0f)),
+            ("15_ascensor_interior", new Vector3(8.05f, 1.6f, -4.4f), new Vector3(6.2f, 1.4f, -4.4f)),
+            ("16_analista", new Vector3(-3.6f, 1.6f, 2.6f), new Vector3(-5.9f, 0.9f, 3.8f)),
+            ("17_supervisora", new Vector3(-0.2f, 1.4f, 0.2f), new Vector3(-1.0f, 1.1f, 1.38f)),
+            ("18_globo_ventanal", new Vector3(0f, 1.6f, -1.2f), new Vector3(0f, 1.4f, -4.5f)),
             ("07_pantalla_final", new Vector3(0, 1.6f, -0.6f), new Vector3(0, 1.6f, 2f)),
             ("08_analisis", new Vector3(20, 1.6f, -0.6f), new Vector3(20, 1.6f, 2f)),
         };

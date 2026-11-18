@@ -17,7 +17,7 @@ namespace AndesSim.EditorTools
         const string TexDir = Root + "/Art/Textures";
 
         // Materiales del entorno (se llenan en PrepareEnvironmentAssets)
-        static Material mNeon, mGlow, mGlass, mCity, mSkyline, mLeds, mFloorGrid, mWallPanel, mTrim, mSteel, mCeilingPanel, mHoloMap, mHoloArc, mFade, mVoid;
+        static Material mTunnel, mNeon, mGlow, mGlass, mCity, mSkyline, mLeds, mFloorGrid, mWallPanel, mTrim, mSteel, mCeilingPanel, mHoloMap, mHoloArc, mFade, mVoid;
         static readonly List<Renderer> neonRenderers = new List<Renderer>();
 
         // ======================================================================
@@ -117,9 +117,15 @@ namespace AndesSim.EditorTools
             mHoloMap = ShaderMat("Holo_Map", "Legacy Shaders/Particles/Additive", Palette.WithAlpha(Palette.Data, 0.45f), map);
             mGlass = ShaderMat("Vidrio", "Legacy Shaders/Transparent/Diffuse", new Color(0.05f, 0.09f, 0.16f, 0.28f));
             mCity = ShaderMat("Ciudad", "Unlit/Texture", Color.white, windows, new Vector2(3, 9));
-            mSkyline = ShaderMat("Cielo", "Unlit/Texture", Color.white, sky);
+            mSkyline = ShaderMat("Cielo", "Sprites/Default", Color.white, sky);
             mLeds = ShaderMat("Rack_LEDs", "Unlit/Texture", Color.white, leds);
             mCeilingPanel = ShaderMat("Panel_Techo", "Unlit/Color", Color.Lerp(Palette.Wall, Palette.Data, 0.32f));
+            var vignette = SaveTex("vignette", 128, 128, (x, y) =>
+            {
+                float d = Vector2.Distance(new Vector2(x, y), new Vector2(63.5f, 63.5f)) / 64f;
+                return new Color(1, 1, 1, Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.38f, 0.95f, d)));
+            }, TextureWrapMode.Clamp, true);
+            mTunnel = ShaderMat("Tunel_Comodidad", "Sprites/Default", Palette.WithAlpha(Palette.Void, 0f), vignette, null, 4400);
             mFade = ShaderMat("Fundido", "Sprites/Default", Palette.WithAlpha(Palette.Void, 0f), null, null, 4500);
             mVoid = ShaderMat("Vacio", "Unlit/Color", Palette.Void);
 
@@ -184,7 +190,13 @@ namespace AndesSim.EditorTools
             // Paredes sólidas: frente, izquierda, derecha
             Deco(PrimitiveType.Cube, "Pared_Frente", room, new Vector3(0, 2, 6.05f), new Vector3(14, 4, 0.1f), mWallPanel);
             Deco(PrimitiveType.Cube, "Pared_Izq", room, new Vector3(-7.05f, 2, 0), new Vector3(0.1f, 4, 12), mWallPanel);
-            Deco(PrimitiveType.Cube, "Pared_Der", room, new Vector3(7.05f, 2, 0), new Vector3(0.1f, 4, 12), mWallPanel);
+            // Pared derecha con la puerta del ascensor (z −5.3 … −3.5, alto 2.7 m)
+            Deco(PrimitiveType.Cube, "Pared_Der_Atras", room, new Vector3(7.05f, 2, -5.65f), new Vector3(0.1f, 4, 0.7f), mWallPanel);
+            Deco(PrimitiveType.Cube, "Pared_Der", room, new Vector3(7.05f, 2, 1.25f), new Vector3(0.1f, 4, 9.5f), mWallPanel);
+            Deco(PrimitiveType.Cube, "Dintel_Ascensor", room, new Vector3(7.05f, 3.35f, -4.4f), new Vector3(0.1f, 1.3f, 1.8f), mWallPanel);
+            Neon("Neon_Puerta_Ascensor", room, new Vector3(6.98f, 2.72f, -4.4f), new Vector3(0.03f, 0.03f, 1.8f));
+            Neon("Neon_Puerta_Asc_A", room, new Vector3(6.98f, 1.36f, -5.3f), new Vector3(0.03f, 2.72f, 0.03f));
+            Neon("Neon_Puerta_Asc_B", room, new Vector3(6.98f, 1.36f, -3.5f), new Vector3(0.03f, 2.72f, 0.03f));
 
             // Pared trasera con ventanal panorámico (x −5.5..5.5, y 0.7..3.5)
             Deco(PrimitiveType.Cube, "Pared_Atras_Baja", room, new Vector3(0, 0.35f, -6.05f), new Vector3(14, 0.7f, 0.1f), mWallPanel);
@@ -245,6 +257,7 @@ namespace AndesSim.EditorTools
             BuildRacks(room);
             BuildCity();
             BuildMotes(room);
+            BuildStorm(room, glass.transform);
             return room;
         }
 
@@ -286,8 +299,70 @@ namespace AndesSim.EditorTools
                 if (rnd.NextDouble() < 0.35)
                     GlowQuad("Baliza_Edificio", city, new Vector3(x, -14f + h + 0.4f, z), 1.4f, Palette.WithAlpha(Palette.Threat, 0.8f), Quaternion.identity);
             }
+            // Edificios del lado derecho (los ve el jugador desde el ascensor)
+            for (int i = 0; i < 32; i++)
+            {
+                float x = 14f + (float)(rnd.NextDouble() * 45);
+                float z = -45f + (float)(rnd.NextDouble() * 70);
+                float w = 3f + (float)rnd.NextDouble() * 5f, d = 3f + (float)rnd.NextDouble() * 5f;
+                float h = 10f + (float)rnd.NextDouble() * (16f + (x - 14f) * 0.5f);
+                var b = Deco(PrimitiveType.Cube, "Edificio_Der", city, new Vector3(x, -30f + h / 2f, z), new Vector3(w, h, d), mCity);
+                b.GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            }
+            var skyR = Deco(PrimitiveType.Quad, "Horizonte_Der", city, new Vector3(80, -2, 0), new Vector3(220, 70, 1), mSkyline, new Vector3(0, 90, 0));
+            skyR.GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             var sky = Deco(PrimitiveType.Quad, "Horizonte", city, new Vector3(0, 8, -95), new Vector3(220, 70, 1), mSkyline, new Vector3(0, 180, 0));
             sky.GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        }
+
+        /// <summary>Lluvia afuera, gotas resbalando en el vidrio y relámpagos que iluminan la sala.</summary>
+        static void BuildStorm(Transform room, Transform window)
+        {
+            // Cortina de lluvia afuera del ventanal
+            var rain = new GameObject("Lluvia");
+            rain.transform.SetParent(room, false);
+            rain.transform.position = new Vector3(0, 5f, -8f);
+            var ps = rain.AddComponent<ParticleSystem>();
+            var main = ps.main; main.loop = true; main.prewarm = true; main.startLifetime = 1.1f;
+            main.startSpeed = 0f; main.startSize = new ParticleSystem.MinMaxCurve(0.02f, 0.035f);
+            main.maxParticles = 500; main.simulationSpace = ParticleSystemSimulationSpace.World;
+            main.startColor = Palette.WithAlpha(Palette.Ink, 0.35f);
+            var em = ps.emission; em.rateOverTime = 420f;
+            var sh = ps.shape; sh.shapeType = ParticleSystemShapeType.Box; sh.scale = new Vector3(14f, 0.1f, 4f);
+            var vel = ps.velocityOverLifetime; vel.enabled = true; vel.space = ParticleSystemSimulationSpace.World;
+            vel.x = new ParticleSystem.MinMaxCurve(-0.6f); vel.y = new ParticleSystem.MinMaxCurve(-9f); vel.z = new ParticleSystem.MinMaxCurve(0f);
+            var pr = rain.GetComponent<ParticleSystemRenderer>();
+            pr.renderMode = ParticleSystemRenderMode.Stretch; pr.velocityScale = 0.06f; pr.lengthScale = 2f;
+            pr.sharedMaterial = mGlow;
+
+            // Gotas que resbalan por el vidrio (lado de afuera)
+            var drops = new GameObject("Gotas_Vidrio");
+            drops.transform.SetParent(room, false);
+            drops.transform.position = new Vector3(0, 2.1f, -6.12f);
+            var dp = drops.AddComponent<ParticleSystem>();
+            var dm = dp.main; dm.loop = true; dm.prewarm = true; dm.startLifetime = new ParticleSystem.MinMaxCurve(2f, 4f);
+            dm.startSpeed = 0f; dm.startSize = new ParticleSystem.MinMaxCurve(0.025f, 0.06f); dm.maxParticles = 160;
+            dm.startColor = Palette.WithAlpha(Palette.Ink, 0.45f); dm.simulationSpace = ParticleSystemSimulationSpace.World;
+            var dem = dp.emission; dem.rateOverTime = 40f;
+            var dsh = dp.shape; dsh.shapeType = ParticleSystemShapeType.Box; dsh.scale = new Vector3(11f, 2.6f, 0.01f);
+            var dvel = dp.velocityOverLifetime; dvel.enabled = true; dvel.space = ParticleSystemSimulationSpace.World;
+            // los tres ejes en el mismo modo (dos constantes), si no Unity llena la consola de errores
+            dvel.x = new ParticleSystem.MinMaxCurve(0f, 0f); dvel.y = new ParticleSystem.MinMaxCurve(-0.35f, -0.08f); dvel.z = new ParticleSystem.MinMaxCurve(0f, 0f);
+            drops.GetComponent<ParticleSystemRenderer>().sharedMaterial = mGlow;
+
+            // Relámpago: luz direccional desde el ventanal hacia la sala (apagada hasta el destello)
+            var bolt = new GameObject("Relampago").AddComponent<Light>();
+            bolt.transform.SetParent(room, false);
+            bolt.type = LightType.Directional; bolt.color = Color.Lerp(Palette.Ink, Palette.Violet, 0.25f);
+            bolt.transform.rotation = Quaternion.Euler(22, 8, 0);
+            bolt.renderMode = LightRenderMode.ForcePixel;
+            bolt.shadows = LightShadows.None;
+
+            var storm = room.gameObject.AddComponent<StormController>();
+            storm.lightning = bolt;
+            storm.windowCenter = window;
+            var horizon = GameObject.Find("Horizonte");
+            if (horizon) storm.sky = horizon.GetComponent<Renderer>();
         }
 
         static void BuildMotes(Transform room)
@@ -323,18 +398,24 @@ namespace AndesSim.EditorTools
             Deco(PrimitiveType.Cylinder, "Tapa", root, c + new Vector3(0, 0.8f, 0), new Vector3(2.85f, 0.03f, 1.62f), mTrim);
             Neon("Neon_Mesa", root, c + new Vector3(0, 0.83f, -0.8f), new Vector3(2.2f, 0.015f, 0.015f));
 
+            // Contenido holográfico (mapa + nodos + rutas): el final lo agranda a escala de la sala
+            var content = new GameObject("Holo_Contenido").transform;
+            content.SetParent(root, false);
+            content.position = c + Vector3.up * 0.86f;
             // Plano del mapa (aditivo, sin colisión)
-            var map = Deco(PrimitiveType.Quad, "Mapa", root, c + new Vector3(0, 0.86f, 0), new Vector3(2.5f, 1.25f, 1), mHoloMap, new Vector3(90, 0, 0));
+            var map = Deco(PrimitiveType.Quad, "Mapa", content, c + new Vector3(0, 0.86f, 0), new Vector3(2.5f, 1.25f, 1), mHoloMap, new Vector3(90, 0, 0));
             map.GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-            GlowQuad("Brillo_Mesa", root, c + new Vector3(0, 0.84f, 0), 2.6f, Palette.WithAlpha(Palette.Data, 0.18f), Quaternion.Euler(90, 0, 0));
+            GameObjectUtility.SetStaticEditorFlags(map, 0);
+            GlowQuad("Brillo_Mesa", content, c + new Vector3(0, 0.84f, 0), 2.6f, Palette.WithAlpha(Palette.Data, 0.18f), Quaternion.Euler(90, 0, 0));
 
             float y = 0.9f;
             Transform Node(string name, Vector3 local, Color col, out TextMeshPro label)
             {
                 var n = new GameObject("Nodo_" + name).transform;
-                n.SetParent(root, false);
+                n.SetParent(content, false);
                 n.position = c + new Vector3(local.x, y, local.z);
                 var pillar = Deco(PrimitiveType.Cylinder, "Columna_Luz", n, n.position + Vector3.up * 0.12f, new Vector3(0.025f, 0.12f, 0.025f), mNeon);
+                GameObjectUtility.SetStaticEditorFlags(pillar, 0);
                 neonRenderers.Add(pillar.GetComponent<Renderer>());
                 GlowQuad("Halo", n, n.position + Vector3.up * 0.01f, 0.28f, Palette.WithAlpha(col, 0.9f), Quaternion.Euler(90, 0, 0));
                 var lgo = new GameObject("Etiqueta");
@@ -364,15 +445,15 @@ namespace AndesSim.EditorTools
             void Arc(string name, Vector3 a, Vector3 b, Color col)
             {
                 var go = new GameObject("Ruta_" + name);
-                go.transform.SetParent(root, false);
+                go.transform.SetParent(content, false);
                 var lr = go.AddComponent<LineRenderer>();
                 lr.sharedMaterial = mHoloArc;
-                lr.positionCount = 24; lr.widthMultiplier = 0.035f; lr.useWorldSpace = true;
+                lr.positionCount = 24; lr.widthMultiplier = 0.035f; lr.useWorldSpace = false; // escala con el holograma
                 lr.startColor = lr.endColor = Palette.WithAlpha(col, 0.55f);
                 for (int i = 0; i < 24; i++)
                 {
                     float k = i / 23f;
-                    lr.SetPosition(i, Vector3.Lerp(a, b, k) + Vector3.up * 0.28f * 4f * k * (1f - k));
+                    lr.SetPosition(i, go.transform.InverseTransformPoint(Vector3.Lerp(a, b, k) + Vector3.up * 0.28f * 4f * k * (1f - k)));
                 }
                 lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             }

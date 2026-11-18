@@ -24,6 +24,7 @@ namespace AndesSim.Scenario05
             PortalEntrada.Crossed += OnCrossed;
             if (feed) feed.FeedFinished += OnFeedFinished;
             if (phone) phone.CallFinished += OnCallFinished;
+            if (feed) feed.AlertTriggered += (_, __) => StartCoroutine(SayLater(2.0f, "¡Alerta de sanciones! Mira las órdenes en ámbar y bloquéalas con la mirada."));
             if (startButton) { startButton.onClick.AddListener(StartMonitoring); startButton.gameObject.SetActive(false); }
             if (finishButton) { finishButton.onClick.AddListener(Finish); finishButton.gameObject.SetActive(false); }
             if (phoneHint) phoneHint.SetActive(false);
@@ -38,6 +39,16 @@ namespace AndesSim.Scenario05
             AmbienceController.Set(RoomMood.Calm);
             FxManager.Title("JUEVES 4 FEB 2016 · 20:36", "BANCO CORRESPONSAL INTERNACIONAL · SALA DE MONITOREO", defense ? Palette.Secure : Palette.Data);
             StartCoroutine(IntroMessage(defense));
+            SupervisorHolo.Say("Bienvenido, analista. Esta noche entran órdenes SWIFT del BANCO ANDINO. Vigila la mesa holográfica.", 1.5f);
+            SupervisorHolo.Say(defense
+                ? "Antes de empezar, activa las tres defensas en el panel de la izquierda."
+                : "Cuando estés listo, mira el botón verde INICIAR MONITOREO.", 2f);
+        }
+
+        IEnumerator SayLater(float delay, string text)
+        {
+            yield return new WaitForSeconds(delay);
+            SupervisorHolo.Say(text, 2.5f);
         }
 
         IEnumerator IntroMessage(bool defense)
@@ -68,6 +79,9 @@ namespace AndesSim.Scenario05
             float paid = feed ? feed.Sum(OrderStatus.Pagada) : 0f;
             FxManager.Title("VIERNES 5 FEB · 03:59", paid > 0 ? $"US$ {paid:0} M ya salieron del corresponsal" : "Ninguna orden salió del corresponsal",
                 paid > 0 ? Palette.Threat : Palette.Secure);
+            SupervisorHolo.Say(paid > 0
+                ? $"Salieron {paid:0} millones y nadie los confirmó. Llama al BANCO ANDINO desde el escritorio."
+                : "Ninguna orden salió. Igual confirma con el BANCO ANDINO por teléfono.", 3f);
             yield return new WaitForSeconds(3.8f);
             UIManager.Msg("VIERNES 5 FEB · 03:59",
                 "Terminó la noche. Hay órdenes pagadas que nadie confirmó.\n" +
@@ -77,6 +91,9 @@ namespace AndesSim.Scenario05
         void OnCallFinished(bool verified)
         {
             if (phoneHint) phoneHint.SetActive(false);
+            SupervisorHolo.Say(verified
+                ? "¡Fraude confirmado! Retuvimos todas las órdenes. Excelente trabajo."
+                : "Nadie contesta: es fin de semana en el BANCO ANDINO. Así fue como se perdieron 101 millones.", 3f);
             StartCoroutine(ShowFinish());
         }
 
@@ -86,7 +103,28 @@ namespace AndesSim.Scenario05
             if (finishButton) finishButton.gameObject.SetActive(true);
         }
 
+        [Tooltip("Final cinematográfico (holograma gigante) antes de la pantalla de resultados.")]
+        public Finale finale;
+        bool finishing;
+
         public void Finish()
+        {
+            if (finishing) return;
+            finishing = true;
+            if (finishButton) finishButton.gameObject.SetActive(false);
+            StartCoroutine(FinishRoutine());
+        }
+
+        IEnumerator FinishRoutine()
+        {
+            if (finale) yield return finale.Play();
+            // El holograma y la supervisora ya cumplieron: se apagan para no tapar los resultados.
+            if (finale && finale.holoContent) finale.holoContent.gameObject.SetActive(false);
+            if (SupervisorHolo.I) SupervisorHolo.I.gameObject.SetActive(false);
+            FinishNow();
+        }
+
+        void FinishNow()
         {
             bool clean = feed != null && feed.Sum(OrderStatus.Pagada) <= 0.01f;
             AudioManager.P(clean ? Sfx.Success : Sfx.Fail);

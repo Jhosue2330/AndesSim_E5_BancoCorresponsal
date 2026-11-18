@@ -134,6 +134,7 @@ namespace AndesSim.EditorTools
             feed.matcher = matcher; feed.rules = rules; result.feed = feed; ctrl.feed = feed;
 
             float radius = 4.4f;
+            var glitches = new ScreenGlitch[3];
             float[] angles = { -46f, 0f, 46f };
             TMP_Text centerHeader = null;
             for (int i = 0; i < 3; i++)
@@ -154,6 +155,13 @@ namespace AndesSim.EditorTools
                     new Vector2(0, 1), new Vector2(1, 1), new Vector2(24, -90), new Vector2(-24, -10));
                 var rows = Rect(canvas, "Filas", new Vector2(0, 0), new Vector2(1, 1), new Vector2(20, 20), new Vector2(-20, -110));
                 feed.screens[i] = rows;
+                // Interferencia digital (glitch): franjas ocultas que aparecen cuando "alguien está adentro"
+                var glitch = canvas.gameObject.AddComponent<ScreenGlitch>();
+                glitch.content = rows;
+                glitch.group = canvas.gameObject.AddComponent<CanvasGroup>();
+                glitch.bars = new Image[3];
+                for (int b = 0; b < 3; b++) glitch.bars[b] = Img(canvas, "Franja_Glitch_" + b, Palette.WithAlpha(Palette.Threat, 0.4f), new Vector2(0, 0.5f), new Vector2(1, 0.5f), Vector2.zero, Vector2.zero);
+                glitches[i] = glitch;
             }
             feed.clockText = centerHeader;
             feed.rowsPerScreen = 12; feed.rowHeight = 64; feed.rowSpacing = 8; feed.fontSize = 32;
@@ -167,6 +175,9 @@ namespace AndesSim.EditorTools
             ctrl.startButton = GazeButton(startCanvas, "INICIAR MONITOREO", BtnGreen, Vector2.zero, new Vector2(700, 150), 52);
             var finishCanvas = MakeCanvas("Boton_Resultado", room, btnPos, btnRot, new Vector2(700, 150), 0.0018f);
             ctrl.finishButton = GazeButton(finishCanvas, "VER RESULTADO", BtnAmber, Vector2.zero, new Vector2(700, 150), 52);
+
+            var glitchDirector = feedGo.AddComponent<GlitchDirector>();
+            glitchDirector.feed = feed; glitchDirector.screens = glitches;
 
             // ---------- mesa holográfica: el viaje del dinero ----------
             BuildHoloTable(room, standPos, feed, feedGo);
@@ -367,10 +378,16 @@ namespace AndesSim.EditorTools
                 "FALLA 3 · NADIE PUDO CONFIRMAR",
                 "El ataque empezó un jueves de noche. El BANCO ANDINO solo atendía en días hábiles y las consultas iban por el mismo canal SWIFT comprometido: el sábado nadie contestó.\n<color=#7dffb0>Defensa →</color> Contactos 24/7 + Número registrado.");
             Txt(ana, "Conclusion", "Conclusión: el ataque no rompió ningún control del corresponsal, aprovechó que no existían. En el modo Defensa se activan los 3 controles.", 28, Ink, TextAlignmentOptions.Center, new Vector2(0, 0.095f), new Vector2(1, 0.165f), new Vector2(40, 0), new Vector2(-40, 0));
-            var aBack = GazeButton(ana, "VOLVER AL RESULTADO", new Color(0.18f, 0.22f, 0.2f), new Vector2(-400, -560), new Vector2(640, 100), 34);
-            var aDef = GazeButton(ana, "VER LA DEFENSA ›", BtnGreen, new Vector2(400, -560), new Vector2(640, 100), 38);
+            var aBack = GazeButton(ana, "VOLVER AL RESULTADO", Color.Lerp(Palette.Panel, Palette.Steel, 0.6f), new Vector2(-620, -560), new Vector2(560, 100), 32);
+            var aDef = GazeButton(ana, "VER LA DEFENSA ›", BtnGreen, new Vector2(620, -560), new Vector2(560, 100), 36);
             UnityEventTools.AddPersistentListener(aBack.onClick, new UnityAction(analysis.Back));
             UnityEventTools.AddPersistentListener(aDef.onClick, new UnityAction(gm.RestartDefense));
+
+            // ---------- modelos de Blender: ascensor, analistas, supervisora, teléfono, globo ----------
+            BuildBlenderContent(room, rig, portal, standPos);
+            BuildGameplayExtras(camGo, rig, feedGo, feed, phone, deskRoot);
+            BuildCinematics(feedGo, feed, ctrl, gm);
+            BuildDemo(feedGo, ctrl, portal, camGo.transform);
 
             // ---------- misión, FX y ambiente ----------
             result.phone = phone;

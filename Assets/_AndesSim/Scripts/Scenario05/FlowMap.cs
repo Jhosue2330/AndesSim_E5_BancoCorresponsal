@@ -28,7 +28,7 @@ namespace AndesSim.Scenario05
         public float hopSeconds = 1.1f;
         public float pulseSize = 0.07f;
 
-        class Pulse { public Transform t; public Renderer r; public Vector3 a, b; public float k, dur; public OrderInfo order; public bool toDest; }
+        class Pulse { public Transform t; public Renderer r; public Vector3 a, b; public float k, dur; public OrderInfo order; public bool toDest, counts; }
 
         readonly List<Pulse> active = new List<Pulse>();
         readonly Stack<Pulse> pool = new Stack<Pulse>();
@@ -89,10 +89,10 @@ namespace AndesSim.Scenario05
             }
         }
 
-        void Launch(OrderInfo o, Vector3 a, Vector3 b, Color c, bool toDest)
+        void Launch(OrderInfo o, Vector3 a, Vector3 b, Color c, bool toDest, bool counts = true)
         {
             var p = pool.Count > 0 ? pool.Pop() : MakePulse();
-            p.a = a; p.b = b; p.k = 0f; p.dur = hopSeconds; p.order = o; p.toDest = toDest;
+            p.a = a; p.b = b; p.k = 0f; p.dur = hopSeconds; p.order = o; p.toDest = toDest; p.counts = counts && o != null;
             p.t.gameObject.SetActive(true);
             p.r.GetPropertyBlock(mpb);
             mpb.SetColor("_Color", c * 1.6f);
@@ -127,10 +127,11 @@ namespace AndesSim.Scenario05
                 if (cam) p.t.rotation = Quaternion.LookRotation(pos - cam.position);
                 if (p.k >= 1f)
                 {
-                    if (p.toDest)
+                    if (p.toDest && p.counts)
                     {
                         if (p.order.country == "Sri Lanka") sriTotal += p.order.amountMillions; else manilaTotal += p.order.amountMillions;
-                        AudioManager.P(Sfx.Paid, 0.45f);
+                        AudioManager.At(Sfx.Paid, pos, 0.8f);
+                        Haptics.Warn();
                         FxManager.I?.Burst(pos, Palette.Threat, 8, 0.6f);
                     }
                     p.t.gameObject.SetActive(false);
@@ -153,6 +154,28 @@ namespace AndesSim.Scenario05
         }
 
         void Flash(Color c) { shieldColor = c; shieldFlash = 1f; }
+
+        /// <summary>Repite el viaje del dinero para el final (no cambia los contadores).</summary>
+        public System.Collections.IEnumerator Replay(bool attack)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                Launch(null, andino.position, corresponsal.position, Palette.Data, false, false);
+                yield return new WaitForSeconds(0.3f);
+            }
+            yield return new WaitForSeconds(hopSeconds * 0.8f);
+            if (attack)
+            {
+                for (int i = 0; i < 4; i++) { Launch(null, corresponsal.position, manila.position, Palette.Threat, true, false); yield return new WaitForSeconds(0.25f); }
+                Launch(null, corresponsal.position, sriLanka.position, Palette.Threat, true, false);
+            }
+            else
+            {
+                Flash(Palette.Secure);
+                FxManager.I?.Burst(corresponsal.position + Vector3.up * 0.3f, Palette.Secure, 40, 2.4f);
+                AudioManager.At(Sfx.Shield, corresponsal.position, 1.3f);
+            }
+        }
 
         void UpdateLabels(bool snap)
         {

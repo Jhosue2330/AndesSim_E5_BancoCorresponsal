@@ -95,6 +95,7 @@ namespace AndesSim
         {
             if (!interactable) return;
             AudioManager.P(Sfx.Click);
+            Haptics.Tap();
             onClick?.Invoke();
             Clicked();
         }

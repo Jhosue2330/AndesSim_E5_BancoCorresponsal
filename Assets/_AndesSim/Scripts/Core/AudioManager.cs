@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AndesSim
 {
-    public enum Sfx { Click, Hover, Evidence, Defense, Alarm, PhoneRing, PhoneAnswer, PhoneNoAnswer, OrderIn, Success, Fail, Teleport, Title, Typing, Shield, Whoosh, Paid }
+    public enum Sfx { Click, Hover, Evidence, Defense, Alarm, PhoneRing, PhoneAnswer, PhoneNoAnswer, OrderIn, Success, Fail, Teleport, Title, Typing, Shield, Whoosh, Paid, Thunder, Glitch, Ding, Swoosh, Achievement }
 
     /// <summary>
     /// Sonidos del escenario. Si un clip no está asignado, genera un tono simple
@@ -115,6 +115,61 @@ namespace AndesSim
 
         void OnDestroy() { if (I == this) I = null; }
 
+        // ---------- audio espacial 3D ----------
+        readonly List<AudioSource> pool3d = new List<AudioSource>();
+        int next3d;
+
+        AudioSource Get3D()
+        {
+            if (pool3d.Count < 10)
+            {
+                var go = new GameObject("Audio3D_" + pool3d.Count);
+                go.transform.SetParent(transform, false);
+                var s = go.AddComponent<AudioSource>();
+                Make3D(s, 1.2f, 18f);
+                pool3d.Add(s);
+                return s;
+            }
+            var src = pool3d[next3d];
+            next3d = (next3d + 1) % pool3d.Count;
+            return src;
+        }
+
+        static void Make3D(AudioSource s, float min, float max)
+        {
+            s.playOnAwake = false;
+            s.spatialBlend = 1f;
+            s.rolloffMode = AudioRolloffMode.Linear;
+            s.minDistance = min; s.maxDistance = max;
+            s.dopplerLevel = 0f;
+        }
+
+        /// <summary>Reproduce un sonido desde un punto del espacio (se oye de ese lado al girar la cabeza).</summary>
+        public void PlayAt(Sfx id, Vector3 position, float volumeScale = 1f)
+        {
+            var clip = Get(id);
+            if (clip == null) return;
+            var s = Get3D();
+            s.transform.position = position;
+            s.pitch = 1f;
+            s.PlayOneShot(clip, sfxVolume * volumeScale);
+        }
+
+        public static void At(Sfx id, Vector3 position, float volumeScale = 1f) { if (I != null) I.PlayAt(id, position, volumeScale); }
+
+        /// <summary>Bucle 3D pegado a un objeto (zumbido de racks, lluvia en el ventanal).</summary>
+        public AudioSource Loop3D(string kind, Transform at, float volume, float maxDistance = 12f)
+        {
+            if (at == null) return null;
+            var s = at.gameObject.AddComponent<AudioSource>();
+            Make3D(s, 1f, maxDistance);
+            s.loop = true; s.volume = volume;
+            s.clip = kind == "rain" ? Generate("rain", 4f, t => 0.35f * (Random.value - 0.5f) * (0.7f + 0.3f * Mathf.Sin(2 * Mathf.PI * 0.25f * t)))
+                   : Generate("hum", 2f, t => 0.12f * Mathf.Sin(2 * Mathf.PI * 60f * t) + 0.06f * Mathf.Sin(2 * Mathf.PI * 120f * t) + 0.03f * (Random.value - 0.5f));
+            s.Play();
+            return s;
+        }
+
         public void Play(Sfx id, float volumeScale = 1f)
         {
             var clip = Get(id);
@@ -164,6 +219,11 @@ namespace AndesSim
                 case Sfx.Shield: return Generate("shield", 0.5f, t => 0.35f * Tone(880 - 500 * t, t) * Mathf.Exp(-t * 6f) * Env(t, 0.5f));
                 case Sfx.Whoosh: return Generate("whoosh", 0.6f, t => 0.3f * (Random.value - 0.5f) * Mathf.Sin(Mathf.PI * t / 0.6f));
                 case Sfx.Paid: return Generate("paid", 0.45f, t => 0.3f * Tone(t < 0.15f ? 392 : 311, t) * Env(t, 0.45f));
+                case Sfx.Thunder: return Generate("thunder", 3.5f, t => 0.6f * (Random.value - 0.5f) * Mathf.Exp(-t * 1.1f) * (0.6f + 0.4f * Mathf.Sin(2 * Mathf.PI * 7f * t)) * Mathf.Clamp01(t * 8f));
+                case Sfx.Glitch: return Generate("glitch", 0.22f, t => 0.25f * ((int)(t * 180) % 2 == 0 ? 1f : -1f) * ((int)(t * 23) % 3 == 0 ? 1f : 0.2f) * Env(t, 0.22f));
+                case Sfx.Ding: return Generate("ding", 1.4f, t => 0.35f * (Tone(1046, t) + 0.5f * Tone(1568, t)) * Mathf.Exp(-t * 3f) * Mathf.Clamp01(t * 200f));
+                case Sfx.Swoosh: return Generate("swoosh", 0.5f, t => 0.25f * (Random.value - 0.5f) * Mathf.Sin(Mathf.PI * t / 0.5f) * (0.5f + 0.5f * Mathf.Sin(2 * Mathf.PI * (8f + 30f * t) * t)));
+                case Sfx.Achievement: return Generate("achievement", 1.1f, t => 0.3f * Tone(t < 0.15f ? 659 : t < 0.3f ? 784 : t < 0.45f ? 988 : 1319, t) * Env(t, 1.1f));
             }
             return null;
         }

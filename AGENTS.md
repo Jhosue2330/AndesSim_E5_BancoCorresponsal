@@ -107,6 +107,13 @@ Namespace de todo el código: `AndesSim` (y `AndesSim.Scenario05`, `AndesSim.Edi
 - VR: nada de sacudir la cámara; los cambios de lugar siempre con fundido.
 - Antes de dar algo por terminado: `AndesSim > 2. Construir escena` y `AndesSim > 7. Sacar capturas`, y revisar las imágenes.
 
+## 5c. Modelos de Blender
+
+- Los modelos propios se generan con `Tools/blender/build_assets.py` (Blender 5.3, sin abrir la ventana):
+  `blender -b --factory-startup --python Tools/blender/build_assets.py -- Assets/_AndesSim/Art/Models/Blender`
+- Salen en `Art/Models/Blender/`; `BlenderModelImporter` los importa en metros y separa las animaciones
+  del personaje (Teclear, Alarma, Caminar, Idle, Senalar, Hablar). Para cambiar un modelo, editar el script, no el FBX.
+
 ## 6. Reglas éticas del curso (incumplir = nota anulada)
 
 - Solo simulación y defensa. Nada contra sistemas reales.

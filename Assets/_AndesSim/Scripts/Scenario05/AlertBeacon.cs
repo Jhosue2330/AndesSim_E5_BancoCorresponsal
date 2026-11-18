@@ -53,7 +53,7 @@ namespace AndesSim.Scenario05
             float nextAlarm = 0f;
             while (t < blinkSeconds)
             {
-                if (rang < alarmRepeats && t >= nextAlarm) { AudioManager.P(Sfx.Alarm); rang++; nextAlarm += 1.4f; }
+                if (rang < alarmRepeats && t >= nextAlarm) { AudioManager.At(Sfx.Alarm, transform.position + Vector3.up * 3.5f, 1.4f); Haptics.Alarm(); rang++; nextAlarm += 1.4f; }
                 bool on = Mathf.Repeat(t, 0.6f) < 0.3f;
                 if (alertLight) alertLight.enabled = on;
                 SetBeacon(on);

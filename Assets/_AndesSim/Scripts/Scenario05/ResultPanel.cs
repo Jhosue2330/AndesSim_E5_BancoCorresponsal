@@ -26,6 +26,7 @@ namespace AndesSim.Scenario05
             float saved = total - lost;
             bool ok = lost <= 0.01f;
 
+            Achievements.I?.EvaluateEnd(lost);
             var (score, letter, color) = Grade(gm, lost);
             sb.AppendLine($"<size=320%><b><color={Palette.Hex(color)}>{letter}</color></b></size><voffset=0.6em>  CALIFICACIÓN DEL ANALISTA · <b>{score}</b>/100</voffset>");
             sb.AppendLine($"<size=120%>Salvado: <color={Palette.Hex(Palette.Secure)}>US$ {saved:0} M</color>   ·   Perdido: <color={Palette.Hex(Palette.Threat)}>US$ {lost:0} M</color></size>");
@@ -51,6 +52,13 @@ namespace AndesSim.Scenario05
                 sb.AppendLine($"Defensas aplicadas: {gm.DefenseCount}/{gm.TotalDefenses}  ·  2016 sin defensas: perdido US$ {RealPaid:0} M.");
             }
             sb.AppendLine($"Evidencias encontradas: {gm.EvidenceCount}/{gm.TotalEvidence}");
+            if (Achievements.I != null)
+            {
+                float t = Achievements.I.Elapsed;
+                sb.AppendLine($"Tiempo de misión: {(int)t / 60}:{(int)t % 60:00}");
+                sb.AppendLine();
+                sb.AppendLine(Achievements.I.Summary());
+            }
             return sb.ToString();
         }
 

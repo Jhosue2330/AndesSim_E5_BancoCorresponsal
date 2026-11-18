@@ -91,6 +91,13 @@ namespace AndesSim.EditorTools
         /// Contenedor (rotación final) → Escala (sin rotación, escala por eje) → modelo.
         /// Así la escala no deforma ejes aunque el FBX traiga rotación propia.
         /// </summary>
+        /// <summary>Coloca un modelo del kit de Kenney por código (escalado a "size" y re-teñido a la paleta).</summary>
+        public static GameObject PlaceKenney(string file, Vector3 size, Vector3 bottomCenter, float yaw, string name)
+        {
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>($"{ModelsDir}/{file}");
+            return prefab ? Place(prefab, size, bottomCenter, Quaternion.Euler(0, yaw, 0), name) : null;
+        }
+
         static GameObject Place(GameObject prefab, Vector3 size, Vector3 bottomCenter, Quaternion rot, string name)
         {
             var container = new GameObject("Modelo_" + name);

@@ -45,5 +45,20 @@ Regla: no tocar archivos de una tarea `EN CURSO` de otro agente.
 | 21 | Feedback: evidencias (+1), palancas animadas, teléfono que vibra, filas animadas, fundido al teletransportarse | Claude | HECHO |
 | 22 | Probar en celular la versión rediseñada (rendimiento, lectura, comodidad) | Humano | PENDIENTE |
 
+## Sprint 5 · Paquete "wow" (todas las ideas)
+
+| # | Tarea | Dueño | Estado |
+|---|---|---|---|
+| 23 | Vibración del celular y sonido espacial 3D | Claude | HECHO |
+| 24 | Tormenta en el ventanal (lluvia, relámpagos que iluminan la sala) y glitch de hackeo | Claude | HECHO |
+| 25 | Blender: analistas animados, supervisora holográfica, teléfono, globo y ascensor | Claude | HECHO |
+| 26 | Llegada en ascensor de vidrio por la fachada | Claude | HECHO |
+| 27 | Caminar libre con túnel anti-mareo; inspeccionar documentos; expediente de órdenes | Claude | HECHO |
+| 28 | Llamada con opciones; minijuego de la lupa «FANDATION»; logros y tiempo | Claude | HECHO |
+| 29 | Intrusión de Lazarus (enjambre) + escudo firewall; holograma gigante final; línea de tiempo | Claude | HECHO |
+| 30 | Modo demo automático para grabar el video | Claude | HECHO |
+| 31 | Voz narradora real (TTS) — hoy son subtítulos con "voz" sintetizada por sílabas | Humano | PENDIENTE (decidir herramienta) |
+| 32 | Probar en celular el paquete wow (rendimiento con personajes, lluvia y efectos) | Humano | PENDIENTE |
+
 ## Propuestas de cambio al núcleo
 (Si Antigravity necesita cambiar algo en `Scripts/Core` o `Scripts/Interaction`, anotarlo aquí.)

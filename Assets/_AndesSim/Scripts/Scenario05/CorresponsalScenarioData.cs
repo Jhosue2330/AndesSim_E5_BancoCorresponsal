@@ -60,6 +60,7 @@ namespace AndesSim.Scenario05
                 "- Limache Cunyas Noemi Cielo · Desarrollo Unity (C#)\n" +
                 "- Castro Inga Anyeli Eliana · Arte 3D, UI y sonido\n" +
                 "Modelos 3D: \"Furniture Kit\" · Kenney (kenney.nl) · CC0\n" +
+                "Modelos propios (Blender 5.3): analistas, supervisora holográfica, teléfono, globo y ascensor · equipo ANDES-SIM\n" +
                 "Audio (Freesound, licencia CC0 1.0):\n" +
                 "- \"Server Room Ambience\" · SoundDesignForYou · freesound.org/s/646682\n" +
                 "- \"Digital Alarm Loop.wav\" · bbrocer · freesound.org/s/389511\n" +
