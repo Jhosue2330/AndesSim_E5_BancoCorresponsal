@@ -16,12 +16,13 @@ namespace AndesSim.EditorTools
 
         static readonly (string name, Vector3 pos, Vector3 lookAt)[] Views =
         {
-            ("01_portal", new Vector3(0, 1.6f, -14f), new Vector3(0, 1.6f, -10f)),
+            ("01_portal", new Vector3(0, -98.4f, -6f), new Vector3(0, -98.0f, -2f)),
             ("02_pantallas", new Vector3(0, 1.6f, -0.5f), new Vector3(0, 2.0f, 4f)),
             ("03_escritorio", new Vector3(3.6f, 1.6f, -1f), new Vector3(5.6f, 0.9f, -1.1f)),
             ("04_panel_defensas", new Vector3(-3.8f, 1.6f, -1f), new Vector3(-5.8f, 1.2f, -1.2f)),
             ("05_vista_general", new Vector3(-0.5f, 3.6f, -5.6f), new Vector3(0.5f, 0.8f, 1.5f)),
-            ("06_esquina_oeste", new Vector3(-3.0f, 1.6f, -1.5f), new Vector3(-6.5f, 0.9f, -3.5f)),
+            ("06_ventanal_ciudad", new Vector3(0f, 1.6f, -0.5f), new Vector3(0f, 1.5f, -6f)),
+            ("09_mesa_holografica", new Vector3(0f, 1.6f, -0.5f), new Vector3(0f, 0.9f, 2.0f)),
             ("07_pantalla_final", new Vector3(0, 1.6f, -0.6f), new Vector3(0, 1.6f, 2f)),
             ("08_analisis", new Vector3(20, 1.6f, -0.6f), new Vector3(20, 1.6f, 2f)),
         };
@@ -33,6 +34,10 @@ namespace AndesSim.EditorTools
                 EditorSceneManager.OpenScene(ScenePath);
             Directory.CreateDirectory(OutDir);
 
+            // Los quads de fundido (pegados a la cámara del jugador) taparían la captura.
+            var fades = new System.Collections.Generic.List<GameObject>();
+            foreach (var r in Object.FindObjectsByType<Renderer>(FindObjectsSortMode.None))
+                if (r.name == "Fundido" && r.gameObject.activeSelf) { r.gameObject.SetActive(false); fades.Add(r.gameObject); }
             var go = new GameObject("CapturaTemporal");
             var cam = go.AddComponent<Camera>();
             cam.clearFlags = CameraClearFlags.SolidColor;
@@ -58,6 +63,7 @@ namespace AndesSim.EditorTools
             Object.DestroyImmediate(go);
             Object.DestroyImmediate(rt);
             Object.DestroyImmediate(tex);
+            foreach (var f in fades) f.SetActive(true);
             Debug.Log($"[AndesSim] {Views.Length} capturas guardadas en {OutDir}/");
         }
     }

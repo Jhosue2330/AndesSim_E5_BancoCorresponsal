@@ -53,20 +53,34 @@ namespace AndesSim.Scenario05
             for (int i = 0; i < n; i++)
             {
                 AudioManager.P(Sfx.PhoneRing);
-                yield return new WaitForSeconds(ringSeconds);
+                // El teléfono vibra mientras suena (1 s) y luego descansa.
+                float t0 = Time.time;
+                while (Time.time - t0 < ringSeconds)
+                {
+                    float e = Time.time - t0;
+                    if (handset) handset.localPosition = handsetPos + Vector3.up * 0.08f +
+                        (e < 1f ? new Vector3(Mathf.Sin(e * 90f), 0f, Mathf.Cos(e * 77f)) * 0.04f : Vector3.zero);
+                    yield return null;
+                }
             }
+            Vector3 top = GetComponent<Collider>().bounds.center + Vector3.up * 0.3f;
 
             Verified = has247 && hasRegistered;
             if (Verified)
             {
                 AudioManager.P(Sfx.PhoneAnswer);
                 int recalled = feed ? feed.RecallAfterVerification() : 0;
+                AmbienceController.Set(RoomMood.Secure);
+                FxManager.I?.Burst(top, Palette.Secure, 30, 2f);
+                FxManager.Float(top, "FRAUDE CONFIRMADO · ÓRDENES RETENIDAS", Palette.Secure);
                 UIManager.Msg("VERIFICACIÓN COMPLETADA",
                     (data ? data.callVerifiedText : "Órdenes retenidas.") + $"\n({recalled} órdenes cambiaron a RETENIDA)", 8f);
             }
             else
             {
                 AudioManager.P(Sfx.PhoneNoAnswer);
+                AmbienceController.Set(RoomMood.Danger);
+                FxManager.Float(top, "SIN RESPUESTA · FIN DE SEMANA", Palette.Threat);
                 string why = data ? data.callNoAnswerText : "Nadie contesta.";
                 if (gm.mode == SimMode.Defensa)
                 {

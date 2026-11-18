@@ -35,15 +35,22 @@ namespace AndesSim
         IEnumerator Move()
         {
             AudioManager.P(Sfx.Teleport);
-            yield return new WaitForSeconds(fadeSeconds);
+            // Fundido a negro: en VR evita el mareo del salto.
+            if (FxManager.I != null) yield return FxManager.I.FadeThrough(Place, fadeSeconds, 0.3f);
+            else { yield return new WaitForSeconds(fadeSeconds); Place(); }
+            Teleported?.Invoke(this);
+        }
+
+        void Place()
+        {
             Vector3 p = transform.position;
-            playerRig.position = new Vector3(p.x, playerRig.position.y, p.z);
+            // El jugador queda sobre el piso del punto (el disco mide 2 × su escala Y de alto).
+            playerRig.position = new Vector3(p.x, p.y - transform.lossyScale.y, p.z);
             if (lookAt != null)
             {
                 Vector3 dir = Vector3.ProjectOnPlane(lookAt.position - playerRig.position, Vector3.up);
                 if (dir.sqrMagnitude > 0.01f) playerRig.rotation = Quaternion.LookRotation(dir);
             }
-            Teleported?.Invoke(this);
         }
     }
 }

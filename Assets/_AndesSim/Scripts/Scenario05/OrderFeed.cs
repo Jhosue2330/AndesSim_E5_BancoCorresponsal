@@ -31,6 +31,8 @@ namespace AndesSim.Scenario05
         public float settleSeconds = 1.2f;
 
         public event Action<OrderInfo> OrderChanged;
+        /// <summary>Una orden nueva aparece en las pantallas (para el mapa holográfico).</summary>
+        public event Action<OrderInfo> OrderArrived;
         public event Action<OrderInfo, string> AlertTriggered;
         public event Action FeedFinished;
 
@@ -76,12 +78,14 @@ namespace AndesSim.Scenario05
                     o.flagReason = "Rechazada por formato y nunca reenviada por los atacantes.";
                     CreateRow(o, shown++);
                     Changed(o);
+                    OrderArrived?.Invoke(o);
                     continue;
                 }
 
                 o.status = OrderStatus.EnTransito;
                 CreateRow(o, shown++);
                 AudioManager.P(Sfx.OrderIn, 0.6f);
+                OrderArrived?.Invoke(o);
 
                 string term = matcher ? matcher.Match(o, data.sanctionsList) : null;
                 string rule = rules ? rules.Evaluate(o, data, seenBeneficiaries) : null;
@@ -95,7 +99,7 @@ namespace AndesSim.Scenario05
                     {
                         string why = SanctionsMatcher.Explain(o, term);
                         alert.Trigger(term, why);
-                        UIManager.Msg("ALERTA · LISTA DE SANCIONES", why + "\n\nMira las órdenes EN REVISIÓN y toca para bloquearlas.", 9f);
+                        StartCoroutine(DelayedMsg(3.4f, "ALERTA · LISTA DE SANCIONES", why + "\n\nMira las órdenes EN REVISIÓN y toca para bloquearlas.", 9f));
                         AlertTriggered?.Invoke(o, term);
                     }
                     StartCoroutine(AutoFreeze(o, OrderStatus.Bloqueada));
@@ -120,6 +124,12 @@ namespace AndesSim.Scenario05
             Finished = true;
             UpdateTexts();
             FeedFinished?.Invoke();
+        }
+
+        IEnumerator DelayedMsg(float delay, string title, string body, float seconds)
+        {
+            yield return new WaitForSeconds(delay);
+            UIManager.Msg(title, body, seconds);
         }
 
         IEnumerator Settle(OrderInfo o)
@@ -271,6 +281,15 @@ namespace AndesSim.Scenario05
             view.background = bg;
             view.Bind(o, this);
             rows[o] = view;
+
+            // Entrada animada: la fila se desliza desde la derecha y aparece.
+            var group = go.AddComponent<CanvasGroup>();
+            Vector2 final = rt.anchoredPosition;
+            StartCoroutine(Ease.Tween(0.35f, k =>
+            {
+                group.alpha = k;
+                rt.anchoredPosition = final + new Vector2((1f - k) * 120f, 0f);
+            }, Ease.OutCubic, unscaled: false));
         }
     }
 }

@@ -15,7 +15,7 @@ namespace AndesSim.EditorTools
     /// Menú AndesSim: arma la escena «Corresponsal_VR» completa con primitivas
     /// (para reemplazar luego por modelos libres) y configura el proyecto para Android.
     /// </summary>
-    public static class Scenario05SceneBuilder
+    public static partial class Scenario05SceneBuilder
     {
         const string Root = "Assets/_AndesSim";
         const string ScenePath = Root + "/Scenes/Corresponsal_VR.unity";
@@ -23,11 +23,15 @@ namespace AndesSim.EditorTools
         const string MatDir = Root + "/Art/Materials";
         const string TmpEssentials = "Packages/com.unity.ugui/Package Resources/TMP Essential Resources.unitypackage";
 
-        static readonly Color Green = new Color(0.22f, 0.95f, 0.54f);
-        static readonly Color Red = new Color(1f, 0.35f, 0.31f);
-        static readonly Color Amber = new Color(1f, 0.76f, 0.29f);
-        static readonly Color Ink = new Color(0.84f, 0.95f, 0.89f);
-        static readonly Color PanelBg = new Color(0.01f, 0.05f, 0.03f, 0.94f);
+        // Todos los colores salen de la paleta (art bible en Scripts/Core/Palette.cs).
+        static readonly Color Green = Palette.Data;      // encabezados y datos (cian)
+        static readonly Color Red = Palette.Threat;
+        static readonly Color Amber = Palette.Warning;
+        static readonly Color Ink = Palette.Ink;
+        static readonly Color PanelBg = Palette.Panel;
+        static readonly Color BtnGreen = Color.Lerp(Palette.Panel, Palette.Secure, 0.45f);
+        static readonly Color BtnRed = Color.Lerp(Palette.Panel, Palette.Threat, 0.5f);
+        static readonly Color BtnAmber = Color.Lerp(Palette.Panel, Palette.Warning, 0.45f);
 
         // ======================================================================
         [MenuItem("AndesSim/1. Importar TMP Essentials", priority = 1)]
@@ -68,27 +72,26 @@ namespace AndesSim.EditorTools
             var data = LoadOrCreateData();
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
-            // ---------- ambiente ----------
-            RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
-            RenderSettings.ambientLight = new Color(0.09f, 0.13f, 0.12f);
+            // ---------- ambiente (art bible: Palette.cs) ----------
+            PrepareEnvironmentAssets();
+            RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Trilight;
+            RenderSettings.ambientSkyColor = Palette.AmbientSky;
+            RenderSettings.ambientEquatorColor = Palette.AmbientEquator;
+            RenderSettings.ambientGroundColor = Palette.AmbientGround;
             RenderSettings.fog = true;
-            RenderSettings.fogColor = new Color(0.01f, 0.03f, 0.02f);
-            RenderSettings.fogDensity = 0.025f;
-            var sun = new GameObject("Luz_Ambiente").AddComponent<Light>();
-            sun.type = LightType.Directional;
-            sun.intensity = 0.25f;
-            sun.color = new Color(0.6f, 0.8f, 0.75f);
-            sun.transform.rotation = Quaternion.Euler(55, -30, 0);
+            RenderSettings.fogMode = FogMode.ExponentialSquared;
+            RenderSettings.fogColor = Palette.Void;
+            RenderSettings.fogDensity = 0.016f;
+            RenderSettings.skybox = null;
 
-            var mFloor = Mat("Piso", new Color(0.06f, 0.08f, 0.08f));
-            var mWall = Mat("Pared", new Color(0.09f, 0.11f, 0.12f));
-            var mDesk = Mat("Escritorio", new Color(0.16f, 0.17f, 0.18f));
-            var mDark = Mat("Oscuro", new Color(0.03f, 0.04f, 0.04f));
-            var mPaper = Mat("Papel", new Color(0.85f, 0.85f, 0.8f));
-            var mGreen = Mat("VerdeEmisivo", Green, Green * 0.8f);
-            var mRed = Mat("RojoAlerta", new Color(0.25f, 0.06f, 0.05f), Color.black);
-            var mTp = Mat("Teleport", new Color(0.22f, 0.95f, 0.54f, 1f), Green * 0.4f);
-            var mPortal = Mat("Portal", new Color(0.1f, 0.6f, 0.4f), Green * 1.2f);
+            var mFloor = mFloorGrid;
+            var mDesk = mSteel;
+            var mDark = Mat("Oscuro", Palette.Void, null, 0.6f, 0.5f);
+            var mPaper = Mat("Papel", Palette.Paper, Palette.Paper * 0.25f);
+            var mGreen = Mat("VerdeEmisivo", Palette.Secure, Palette.Secure * 0.9f);
+            var mRed = Mat("RojoAlerta", Palette.Threat * 0.3f, Color.black);
+            var mTp = Mat("Teleport", Palette.Data * 0.4f, Palette.Data * 0.6f);
+            var mPortal = Mat("Portal", Palette.Violet, Palette.Violet * 1.4f);
 
             // ---------- jugador ----------
             var rig = new GameObject("PlayerRig").transform;
@@ -99,9 +102,9 @@ namespace AndesSim.EditorTools
             camGo.transform.localPosition = new Vector3(0, 1.6f, 0);
             var cam = camGo.AddComponent<Camera>();
             cam.clearFlags = CameraClearFlags.SolidColor;
-            cam.backgroundColor = Color.black;
+            cam.backgroundColor = Palette.Void;
             cam.nearClipPlane = 0.05f;
-            cam.farClipPlane = 60f;
+            cam.farClipPlane = 120f;
             camGo.AddComponent<AudioListener>();
             camGo.AddComponent<GazeReticlePointer>();
             camGo.AddComponent<HeadLookFallback>();
@@ -117,21 +120,7 @@ namespace AndesSim.EditorTools
             if (bootstrap != null) managers.AddComponent(bootstrap);
 
             // ---------- sala ----------
-            var room = new GameObject("Sala_Monitoreo").transform;
-            Prim(PrimitiveType.Cube, "Piso", room, new Vector3(0, -0.05f, 0), new Vector3(14, 0.1f, 12), mFloor);
-            Prim(PrimitiveType.Cube, "Techo", room, new Vector3(0, 4.05f, 0), new Vector3(14, 0.1f, 12), mDark);
-            Prim(PrimitiveType.Cube, "Pared_Frente", room, new Vector3(0, 2, 6.05f), new Vector3(14, 4, 0.1f), mWall);
-            Prim(PrimitiveType.Cube, "Pared_Atras", room, new Vector3(0, 2, -6.05f), new Vector3(14, 4, 0.1f), mWall);
-            Prim(PrimitiveType.Cube, "Pared_Izq", room, new Vector3(-7.05f, 2, 0), new Vector3(0.1f, 4, 12), mWall);
-            Prim(PrimitiveType.Cube, "Pared_Der", room, new Vector3(7.05f, 2, 0), new Vector3(0.1f, 4, 12), mWall);
-            for (int i = 0; i < 3; i++)
-            {
-                var l = new GameObject("Luz_Sala_" + i).AddComponent<Light>();
-                l.transform.SetParent(room, false);
-                l.type = LightType.Point; l.range = 9; l.intensity = 0.7f;
-                l.color = new Color(0.55f, 0.9f, 0.75f);
-                l.transform.position = new Vector3(-4 + i * 4, 3.6f, -1);
-            }
+            var room = BuildRoom(out var moodLights);
 
             Vector3 standPos = new Vector3(0, 0, -0.5f);
 
@@ -152,9 +141,13 @@ namespace AndesSim.EditorTools
                 float a = angles[i] * Mathf.Deg2Rad;
                 var pos = standPos + new Vector3(Mathf.Sin(a) * radius, 2.25f, Mathf.Cos(a) * radius);
                 var rot = Quaternion.LookRotation(Vector3.ProjectOnPlane(pos - standPos, Vector3.up));
-                Prim(PrimitiveType.Cube, $"Marco_Pantalla_{i + 1}", room, pos + rot * new Vector3(0, 0, 0.06f), new Vector3(3.45f, 2.3f, 0.08f), mDark, rot.eulerAngles);
+                Prim(PrimitiveType.Cube, $"Marco_Pantalla_{i + 1}", room, pos + rot * new Vector3(0, 0, 0.06f), new Vector3(3.45f, 2.3f, 0.08f), mTrim, rot.eulerAngles);
+                Neon($"Neon_Pantalla_Sup_{i + 1}", room, pos + rot * new Vector3(0, 1.17f, 0.02f), new Vector3(3.4f, 0.025f, 0.03f), rot.eulerAngles);
+                Neon($"Neon_Pantalla_Inf_{i + 1}", room, pos + rot * new Vector3(0, -1.17f, 0.02f), new Vector3(3.4f, 0.025f, 0.03f), rot.eulerAngles);
+                GlowQuad($"Halo_Pantalla_{i + 1}", room, pos + rot * new Vector3(0, 0, 0.12f), 1f, Palette.WithAlpha(Palette.Data, 0.22f), rot).transform.localScale = new Vector3(4.6f, 3.2f, 1f);
                 var canvas = MakeCanvas($"Pantalla_{i + 1:00}", room, pos, rot, new Vector2(1600, 1060), 0.002f);
                 Img(canvas, "Fondo", PanelBg, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+                Img(canvas, "Franja", Palette.WithAlpha(Palette.Data, 0.14f), new Vector2(0, 1), new Vector2(1, 1), new Vector2(0, -100), Vector2.zero);
                 var header = Txt(canvas, "Encabezado", $"MONITOREO SWIFT · PANTALLA {i + 1}", 40, Green, TextAlignmentOptions.MidlineLeft,
                     new Vector2(0, 1), new Vector2(1, 1), new Vector2(24, -90), new Vector2(-24, -10));
                 if (i == 1) centerHeader = Txt(canvas, "Reloj", "", 40, Amber, TextAlignmentOptions.MidlineRight,
@@ -165,20 +158,18 @@ namespace AndesSim.EditorTools
             feed.clockText = centerHeader;
             feed.rowsPerScreen = 12; feed.rowHeight = 64; feed.rowSpacing = 8; feed.fontSize = 32;
 
-            // Barra de estado bajo la pantalla central
-            var tickerPos = standPos + new Vector3(0, 0.82f, radius - 0.15f);
-            var ticker = MakeCanvas("Barra_Estado", room, tickerPos, Quaternion.identity, new Vector2(1600, 150), 0.002f);
-            Img(ticker, "Fondo", PanelBg, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
-            feed.totalsText = Txt(ticker, "Totales", "", 32, Ink, TextAlignmentOptions.Center, new Vector2(0, 0.5f), new Vector2(1, 1), new Vector2(10, 0), new Vector2(-10, -4));
-            ui.statusText = Txt(ticker, "Estado", "", 28, Ink, TextAlignmentOptions.Center, new Vector2(0, 0), new Vector2(1, 0.5f), new Vector2(10, 4), new Vector2(-10, 0));
+            // (El tablero de dinero vive ahora en la mesa holográfica.)
 
             // Botones por mirada bajo las pantallas
-            var btnPos = standPos + new Vector3(-1.5f, 1.15f, 1.9f);
+            var btnPos = standPos + new Vector3(-2.5f, 1.2f, 1.6f);
             var btnRot = Quaternion.LookRotation(Vector3.ProjectOnPlane(btnPos - standPos, Vector3.up));
             var startCanvas = MakeCanvas("Boton_Iniciar", room, btnPos, btnRot, new Vector2(700, 150), 0.0018f);
-            ctrl.startButton = GazeButton(startCanvas, "INICIAR MONITOREO", new Color(0.05f, 0.35f, 0.2f), Vector2.zero, new Vector2(700, 150), 52);
+            ctrl.startButton = GazeButton(startCanvas, "INICIAR MONITOREO", BtnGreen, Vector2.zero, new Vector2(700, 150), 52);
             var finishCanvas = MakeCanvas("Boton_Resultado", room, btnPos, btnRot, new Vector2(700, 150), 0.0018f);
-            ctrl.finishButton = GazeButton(finishCanvas, "VER RESULTADO", new Color(0.4f, 0.3f, 0.05f), Vector2.zero, new Vector2(700, 150), 52);
+            ctrl.finishButton = GazeButton(finishCanvas, "VER RESULTADO", BtnAmber, Vector2.zero, new Vector2(700, 150), 52);
+
+            // ---------- mesa holográfica: el viaje del dinero ----------
+            BuildHoloTable(room, standPos, feed, feedGo);
 
             // ---------- alerta (baliza + banner) ----------
             var alertGo = new GameObject("Alerta_Sanciones");
@@ -210,7 +201,8 @@ namespace AndesSim.EditorTools
             Prim(PrimitiveType.Cube, "Mueble", panelRoot, panelRoot.TransformPoint(new Vector3(0, 0.55f, 0.3f)), new Vector3(2.8f, 1.1f, 0.6f), mDesk, panelRoot.eulerAngles);
             var panelCanvas = MakeCanvas("Rotulo_Panel", panelRoot, panelRoot.TransformPoint(new Vector3(0, 2.35f, 0.55f)), panelRoot.rotation, new Vector2(1400, 130), 0.002f);
             Img(panelCanvas, "Fondo", PanelBg, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
-            Txt(panelCanvas, "Titulo", "PANEL DE CONTROLES · DEFENSAS", 48, Green, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, new Vector2(20, 0), new Vector2(-20, 0));
+            Neon("Neon_Panel", panelRoot, panelRoot.TransformPoint(new Vector3(0, 1.115f, 0.0f)), new Vector3(2.8f, 0.02f, 0.02f), panelRoot.eulerAngles);
+            Txt(panelCanvas, "Titulo", "PANEL DE CONTROLES · DEFENSAS", 48, Palette.Secure, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, new Vector2(20, 0), new Vector2(-20, 0));
             string[,] defs =
             {
                 { CallbackDefense.Contacts247, "Contactos 24/7", "El BANCO ANDINO registra una línea de incidentes que atiende las 24 horas, los 7 días. Ya no importa que sea fin de semana." },
@@ -259,7 +251,11 @@ namespace AndesSim.EditorTools
             Object.DestroyImmediate(hint.GetComponent<Collider>());
             ctrl.phoneHint = hint;
             var phoneLbl = MakeCanvas("Rotulo_Telefono", deskRoot, deskRoot.TransformPoint(new Vector3(0.6f, 1.45f, 0)), deskRoot.rotation, new Vector2(500, 90), 0.002f);
-            Txt(phoneLbl, "Texto", "TELÉFONO · BANCO ANDINO", 36, Green, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            var lamp = new GameObject("Lampara_Escritorio").AddComponent<Light>();
+            lamp.transform.SetParent(deskRoot, false);
+            lamp.transform.position = deskRoot.TransformPoint(new Vector3(-0.3f, 1.6f, 0.2f));
+            lamp.type = LightType.Point; lamp.range = 3.2f; lamp.intensity = 1.2f; lamp.color = Color.Lerp(Palette.Warning, Palette.Ink, 0.5f);
+            Txt(phoneLbl, "Texto", "TELÉFONO · BANCO ANDINO", 36, Palette.Warning, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
             var sanctions = Prim(PrimitiveType.Cube, "Lista_Sanciones", deskRoot, deskRoot.TransformPoint(new Vector3(-0.2f, 0.8f, -0.1f)), new Vector3(0.3f, 0.01f, 0.4f), mPaper, deskRoot.eulerAngles);
             Evidence(sanctions, "lista_sanciones", "Lista de sanciones (ficticia)",
@@ -277,8 +273,9 @@ namespace AndesSim.EditorTools
             // ---------- puntos de teletransporte ----------
             var screenCenter = GameObject.Find("Pantalla_02").transform;
             var tpCentro = Teleport("TP_Centro", room, standPos, mTp, screenCenter, "Pantallas");
-            Teleport("TP_Panel", room, new Vector3(-3.8f, 0, -1f), mTp, panelRoot, "Panel de controles");
-            Teleport("TP_Escritorio", room, new Vector3(3.6f, 0, -1f), mTp, deskRoot, "Escritorio");
+            var tpPanel = Teleport("TP_Panel", room, new Vector3(-3.8f, 0, -1f), mTp, panelRoot, "Panel de controles");
+            var tpDesk = Teleport("TP_Escritorio", room, new Vector3(3.6f, 0, -1f), mTp, deskRoot, "Escritorio");
+            foreach (var t in new[] { tpCentro, tpPanel, tpDesk }) DecorateTeleport(t);
 
             // ---------- portal de entrada ----------
             var portalRoot = new GameObject("Portal_Entrada").transform;
@@ -307,10 +304,19 @@ namespace AndesSim.EditorTools
             portal.introBody = Txt(intro, "Historia", "", 30, Ink, TextAlignmentOptions.TopLeft, new Vector2(0, 0), new Vector2(1, 1), new Vector2(40, 190), new Vector2(-40, -235));
             portal.introBody.enableAutoSizing = true; portal.introBody.fontSizeMin = 22; portal.introBody.fontSizeMax = 30;
             portal.introBody.paragraphSpacing = 22;
-            var bAtk = GazeButton(intro, "MODO ATAQUE 2016", new Color(0.45f, 0.08f, 0.06f), new Vector2(-370, -400), new Vector2(640, 140), 44);
-            var bDef = GazeButton(intro, "MODO DEFENSA", new Color(0.05f, 0.35f, 0.2f), new Vector2(370, -400), new Vector2(640, 140), 44);
+            portal.introBody.gameObject.AddComponent<Typewriter>();
+            Img(intro, "Borde_Sup", Palette.WithAlpha(Palette.Violet, 0.9f), new Vector2(0, 1), new Vector2(1, 1), new Vector2(0, -6), Vector2.zero);
+            var bigTitle = MakeCanvas("Titulo_ANDES", portalRoot, new Vector3(0, 3.35f, -11.2f), Quaternion.identity, new Vector2(1600, 220), 0.0018f);
+            var tt = Txt(bigTitle, "Texto", "ANDES·SIM", 150, Palette.Data, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            tt.characterSpacing = 30; tt.fontStyle = FontStyles.Bold;
+            var bAtk = GazeButton(intro, "MODO ATAQUE 2016", BtnRed, new Vector2(-370, -400), new Vector2(640, 140), 44);
+            var bDef = GazeButton(intro, "MODO DEFENSA", BtnGreen, new Vector2(370, -400), new Vector2(640, 140), 44);
             UnityEventTools.AddPersistentListener(bAtk.onClick, new UnityAction(portal.ChooseAttack));
             UnityEventTools.AddPersistentListener(bDef.onClick, new UnityAction(portal.ChooseDefense));
+            DecoratePortal(portalRoot, ring, ring.position);
+            // El portal flota en un vacío lejos de la sala (100 m abajo): la niebla lo aísla.
+            portalRoot.position += new Vector3(0, -100f, 8f);
+            rig.position = new Vector3(0, -100f, -6f);
 
             // ---------- mensaje flotante ----------
             var toast = MakeCanvas("UI_Mensaje", null, new Vector3(0, 1.4f, -12), Quaternion.identity, new Vector2(1100, 470), 0.0017f);
@@ -333,9 +339,9 @@ namespace AndesSim.EditorTools
             ui.endCredits = Txt(end, "Creditos", data.credits, 22, new Color(0.75f, 0.85f, 0.8f), TextAlignmentOptions.TopLeft, new Vector2(0.58f, 0.16f), new Vector2(1, 1), new Vector2(10, 0), new Vector2(-40, -175));
             ui.endCredits.enableAutoSizing = false; ui.endCredits.fontSize = 28;
             ui.endCredits.lineSpacing = 2f; ui.endCredits.characterSpacing = 0.5f;
-            var rAtk = GazeButton(end, "REPETIR · ATAQUE 2016", new Color(0.45f, 0.08f, 0.06f), new Vector2(-610, -540), new Vector2(560, 120), 34);
-            var rAna = GazeButton(end, "VER ANÁLISIS", new Color(0.42f, 0.30f, 0.04f), new Vector2(0, -540), new Vector2(560, 120), 38);
-            var rDef = GazeButton(end, "REPETIR · DEFENSA", new Color(0.05f, 0.35f, 0.2f), new Vector2(610, -540), new Vector2(560, 120), 34);
+            var rAtk = GazeButton(end, "REPETIR · ATAQUE 2016", BtnRed, new Vector2(-610, -540), new Vector2(560, 120), 34);
+            var rAna = GazeButton(end, "VER ANÁLISIS", BtnAmber, new Vector2(0, -540), new Vector2(560, 120), 38);
+            var rDef = GazeButton(end, "REPETIR · DEFENSA", BtnGreen, new Vector2(610, -540), new Vector2(560, 120), 34);
             UnityEventTools.AddPersistentListener(rAtk.onClick, new UnityAction(gm.RestartAttack));
             UnityEventTools.AddPersistentListener(rDef.onClick, new UnityAction(gm.RestartDefense));
             ui.endScreenRoot = end.gameObject;
@@ -362,9 +368,14 @@ namespace AndesSim.EditorTools
                 "El ataque empezó un jueves de noche. El BANCO ANDINO solo atendía en días hábiles y las consultas iban por el mismo canal SWIFT comprometido: el sábado nadie contestó.\n<color=#7dffb0>Defensa →</color> Contactos 24/7 + Número registrado.");
             Txt(ana, "Conclusion", "Conclusión: el ataque no rompió ningún control del corresponsal, aprovechó que no existían. En el modo Defensa se activan los 3 controles.", 28, Ink, TextAlignmentOptions.Center, new Vector2(0, 0.095f), new Vector2(1, 0.165f), new Vector2(40, 0), new Vector2(-40, 0));
             var aBack = GazeButton(ana, "VOLVER AL RESULTADO", new Color(0.18f, 0.22f, 0.2f), new Vector2(-400, -560), new Vector2(640, 100), 34);
-            var aDef = GazeButton(ana, "VER LA DEFENSA ›", new Color(0.05f, 0.35f, 0.2f), new Vector2(400, -560), new Vector2(640, 100), 38);
+            var aDef = GazeButton(ana, "VER LA DEFENSA ›", BtnGreen, new Vector2(400, -560), new Vector2(640, 100), 38);
             UnityEventTools.AddPersistentListener(aBack.onClick, new UnityAction(analysis.Back));
             UnityEventTools.AddPersistentListener(aDef.onClick, new UnityAction(gm.RestartDefense));
+
+            // ---------- misión, FX y ambiente ----------
+            result.phone = phone;
+            BuildObjectiveTracker(feedGo, feed, phone, ctrl);
+            BuildFx(managers, camGo.transform, moodLights);
 
             // ---------- modelos 3D (Assets/_AndesSim/Art/modelos.json) ----------
             ModelPlacer.Apply();
@@ -546,19 +557,30 @@ namespace AndesSim.EditorTools
             return data;
         }
 
-        static Material Mat(string name, Color color, Color? emission = null)
+        static Material Mat(string name, Color color, Color? emission = null, float gloss = 0.25f, float metal = 0f)
         {
             string path = $"{MatDir}/{name}.mat";
             var m = AssetDatabase.LoadAssetAtPath<Material>(path);
-            if (m != null) return m;
-            m = new Material(Shader.Find("Standard")) { color = color };
-            m.SetFloat("_Glossiness", 0.25f);
+            bool isNew = m == null;
+            if (isNew) m = new Material(Shader.Find("Standard"));
+            else if (m.shader.name != "Standard") m.shader = Shader.Find("Standard");
+            // Siempre se reescriben color y emisión: así el material sigue a la paleta al reconstruir.
+            m.color = color;
+            m.SetFloat("_Glossiness", gloss);
+            m.SetFloat("_Metallic", metal);
             if (emission.HasValue && emission.Value != Color.black)
             {
                 m.EnableKeyword("_EMISSION");
                 m.SetColor("_EmissionColor", emission.Value);
+                m.globalIlluminationFlags = MaterialGlobalIlluminationFlags.None;
             }
-            AssetDatabase.CreateAsset(m, path);
+            else
+            {
+                m.DisableKeyword("_EMISSION");
+                m.SetColor("_EmissionColor", Color.black);
+            }
+            if (isNew) AssetDatabase.CreateAsset(m, path);
+            else EditorUtility.SetDirty(m);
             return m;
         }
 

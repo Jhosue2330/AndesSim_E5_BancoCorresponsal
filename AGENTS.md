@@ -95,6 +95,18 @@ Namespace de todo el código: `AndesSim` (y `AndesSim.Scenario05`, `AndesSim.Edi
    y el APK con `AndesSim > 5. Generar APK`. No editar a mano `Assets/Plugins/Android` ni `Assets/XR`.
 8. Textos con TextMeshPro (`com.unity.ugui` 2.0).
 
+## 5b. Dirección de arte (obligatoria)
+
+- **Art bible**: `Assets/_AndesSim/Scripts/Core/Palette.cs` — estilo «SOC cyber-noir»: sala nocturna
+  de acero azul oscuro; el neón y las pantallas son la luz. Cian = datos/calma, rojo = amenaza,
+  ámbar = alerta/revisión, verde = protegido, violeta = portal.
+- **Todo color sale de `Palette`** (materiales, luces, UI, partículas). No usar `Color.red`, hex sueltos ni el
+  material gris por defecto. Los modelos importados se re-tiñen solos con `ModelPlacer.RestyleToPalette`.
+- El ambiente cambia por estado con `AmbienceController.Set(RoomMood.X)`; los efectos van por `FxManager`
+  (fundidos, ráfagas, texto flotante, tarjetas de título). Nada de Instantiate por evento.
+- VR: nada de sacudir la cámara; los cambios de lugar siempre con fundido.
+- Antes de dar algo por terminado: `AndesSim > 2. Construir escena` y `AndesSim > 7. Sacar capturas`, y revisar las imágenes.
+
 ## 6. Reglas éticas del curso (incumplir = nota anulada)
 
 - Solo simulación y defensa. Nada contra sistemas reales.

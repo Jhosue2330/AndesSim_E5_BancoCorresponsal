@@ -33,5 +33,17 @@ Regla: no tocar archivos de una tarea `EN CURSO` de otro agente.
 | 14 | Video 2–3 min (ataque y defensa) | Humano | PENDIENTE |
 | 15 | Ficha del proyecto (máx. 4 páginas) | Humano + IA | PENDIENTE |
 
+## Sprint 4 · Rediseño "VR avanzada" (game design)
+
+| # | Tarea | Dueño | Estado |
+|---|---|---|---|
+| 16 | Art bible + paleta única (`Palette.cs`) y re-teñido de modelos | Claude | HECHO |
+| 17 | Sala cyber-noir: neón, ventanal con ciudad nocturna, racks con LEDs, techo de paneles, polvo ambiental | Claude | HECHO |
+| 18 | Mesa holográfica: mapa del dinero con pulsos (Andino → Corresponsal → Manila/Sri Lanka) y contadores | Claude | HECHO |
+| 19 | Ambiente por estado (calma/alerta/peligro/protegido), baliza giratoria y música de tensión generada | Claude | HECHO |
+| 20 | Panel de misión, intro con máquina de escribir, tarjetas de título y calificación S/A/B/C | Claude | HECHO |
+| 21 | Feedback: evidencias (+1), palancas animadas, teléfono que vibra, filas animadas, fundido al teletransportarse | Claude | HECHO |
+| 22 | Probar en celular la versión rediseñada (rendimiento, lectura, comodidad) | Humano | PENDIENTE |
+
 ## Propuestas de cambio al núcleo
 (Si Antigravity necesita cambiar algo en `Scripts/Core` o `Scripts/Interaction`, anotarlo aquí.)

@@ -15,6 +15,13 @@ namespace AndesSim
 
         public bool Found { get; private set; }
 
+        System.Collections.IEnumerator Pop()
+        {
+            Vector3 s0 = transform.localScale;
+            yield return Ease.Tween(0.35f, k => transform.localScale = s0 * (1f + 0.25f * Mathf.Sin(k * Mathf.PI)), Ease.OutCubic);
+            transform.localScale = s0;
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -33,6 +40,10 @@ namespace AndesSim
                 AudioManager.P(Sfx.Evidence);
                 SetBaseColor(foundColor);
                 if (foundMarker) foundMarker.SetActive(true);
+                Vector3 top = GetComponent<Collider>().bounds.center + Vector3.up * 0.25f;
+                FxManager.I?.Burst(top, Palette.Warning, 16, 1.4f);
+                if (gm != null) FxManager.Float(top, $"+1 EVIDENCIA  {gm.EvidenceCount}/{gm.TotalEvidence}", Palette.Warning);
+                StartCoroutine(Pop());
             }
         }
     }

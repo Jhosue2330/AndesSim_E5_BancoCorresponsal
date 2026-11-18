@@ -40,6 +40,9 @@ namespace AndesSim.Scenario05
                 evidence.interactable = true;
                 evidence.description = explanation;
             }
+            UIManager.I?.HideMessage(); // la alerta manda: se limpia la pantalla
+            AmbienceController.Set(RoomMood.Alert);
+            FxManager.Title("ALERTA · LISTA DE SANCIONES", $"Coincidencia «{term}» en la dirección del beneficiario", Palette.Threat);
             StartCoroutine(Blink());
         }
 
@@ -59,6 +62,10 @@ namespace AndesSim.Scenario05
             }
             if (alertLight) alertLight.enabled = false;
             SetBeacon(true);
+            // Tras la alarma: en 2016 la sala queda en rojo tenue; con defensas, vuelve a la calma.
+            bool defense = GameManager.I != null && GameManager.I.mode == SimMode.Defensa;
+            if (AmbienceController.I != null && AmbienceController.I.Mood == RoomMood.Alert)
+                AmbienceController.Set(defense ? RoomMood.Calm : RoomMood.Danger);
         }
 
         void SetBeacon(bool on)

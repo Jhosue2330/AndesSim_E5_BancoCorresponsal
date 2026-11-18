@@ -47,9 +47,18 @@ namespace AndesSim
             IsActive = true;
             GameManager.I?.ApplyDefense(defenseId);
             SetBaseColor(activeColor);
-            if (lever) lever.localEulerAngles = leverOnEuler;
+            if (lever)
+            {
+                Quaternion from = lever.localRotation, to = Quaternion.Euler(leverOnEuler);
+                StartCoroutine(Ease.Tween(0.45f, k => lever.localRotation = Quaternion.SlerpUnclamped(from, to, k), Ease.OutBack));
+            }
             if (onIndicator) onIndicator.SetActive(true);
             AudioManager.P(Sfx.Defense);
+            AudioManager.P(Sfx.Shield, 0.6f);
+            Vector3 top = GetComponent<Collider>().bounds.center + Vector3.up * 0.35f;
+            FxManager.I?.Burst(top, Palette.Secure, 20, 1.6f);
+            var gm = GameManager.I;
+            if (gm != null) FxManager.Float(top + Vector3.up * 0.1f, $"DEFENSA ACTIVA  {gm.DefenseCount}/{gm.TotalDefenses}", Palette.Secure);
             UIManager.Msg("DEFENSA ACTIVADA · " + title, description, 6f);
         }
     }

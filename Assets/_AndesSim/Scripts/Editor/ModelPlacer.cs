@@ -110,7 +110,45 @@ namespace AndesSim.EditorTools
 
             container.transform.SetPositionAndRotation(bottomCenter, rot);
             foreach (var c in container.GetComponentsInChildren<Collider>()) UnityEngine.Object.DestroyImmediate(c);
+            RestyleToPalette(container);
             return container;
+        }
+
+        /// <summary>
+        /// Lleva los modelos de Kenney a la paleta del juego (art bible): las partes claras pasan a acero,
+        /// las oscuras a moldura y las verdes (plantas) a un verde apagado. Mantiene el contraste del modelo.
+        /// </summary>
+        static void RestyleToPalette(GameObject go)
+        {
+            var steel = PaletteMat("Modelo_Acero", AndesSim.Palette.Steel);
+            var trim = PaletteMat("Modelo_Moldura", AndesSim.Palette.Trim);
+            var plant = PaletteMat("Modelo_Planta", Color.Lerp(AndesSim.Palette.Trim, AndesSim.Palette.Secure, 0.45f));
+            var accent = PaletteMat("Modelo_Acento", Color.Lerp(AndesSim.Palette.Steel, AndesSim.Palette.Data, 0.35f));
+            foreach (var r in go.GetComponentsInChildren<Renderer>())
+            {
+                var mats = r.sharedMaterials;
+                for (int i = 0; i < mats.Length; i++)
+                {
+                    Color c = mats[i] != null && mats[i].HasProperty("_Color") ? mats[i].color : Color.gray;
+                    Color.RGBToHSV(c, out float h, out float s, out float v);
+                    bool green = s > 0.25f && h > 0.2f && h < 0.45f;
+                    bool vivid = s > 0.5f && v > 0.5f;
+                    mats[i] = green ? plant : vivid ? accent : v > 0.45f ? steel : trim;
+                }
+                r.sharedMaterials = mats;
+            }
+        }
+
+        static Material PaletteMat(string name, Color color)
+        {
+            string path = $"Assets/_AndesSim/Art/Materials/{name}.mat";
+            var m = AssetDatabase.LoadAssetAtPath<Material>(path);
+            if (m == null) { m = new Material(Shader.Find("Standard")); AssetDatabase.CreateAsset(m, path); }
+            m.color = color;
+            m.SetFloat("_Glossiness", 0.5f);
+            m.SetFloat("_Metallic", 0.5f);
+            EditorUtility.SetDirty(m);
+            return m;
         }
 
         /// <summary>Caja que envuelve todos los renderers, en el espacio del contenedor (que está en el origen sin rotar).</summary>

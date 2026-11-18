@@ -35,6 +35,14 @@ namespace AndesSim.Scenario05
         {
             if (startButton) startButton.gameObject.SetActive(true);
             bool defense = GameManager.I != null && GameManager.I.mode == SimMode.Defensa;
+            AmbienceController.Set(RoomMood.Calm);
+            FxManager.Title("JUEVES 4 FEB 2016 · 20:36", "BANCO CORRESPONSAL INTERNACIONAL · SALA DE MONITOREO", defense ? Palette.Secure : Palette.Data);
+            StartCoroutine(IntroMessage(defense));
+        }
+
+        IEnumerator IntroMessage(bool defense)
+        {
+            yield return new WaitForSeconds(3.8f);
             if (defense)
                 UIManager.Msg("MODO DEFENSA",
                     "Antes de iniciar el monitoreo, ve al PANEL DE CONTROLES (izquierda) y activa las defensas.\n" +
@@ -52,9 +60,15 @@ namespace AndesSim.Scenario05
             feed.StartFeed();
         }
 
-        void OnFeedFinished()
+        void OnFeedFinished() => StartCoroutine(FeedFinishedRoutine());
+
+        IEnumerator FeedFinishedRoutine()
         {
             if (phoneHint) phoneHint.SetActive(true);
+            float paid = feed ? feed.Sum(OrderStatus.Pagada) : 0f;
+            FxManager.Title("VIERNES 5 FEB · 03:59", paid > 0 ? $"US$ {paid:0} M ya salieron del corresponsal" : "Ninguna orden salió del corresponsal",
+                paid > 0 ? Palette.Threat : Palette.Secure);
+            yield return new WaitForSeconds(3.8f);
             UIManager.Msg("VIERNES 5 FEB · 03:59",
                 "Terminó la noche. Hay órdenes pagadas que nadie confirmó.\n" +
                 "Ve al ESCRITORIO (derecha) y usa el TELÉFONO para llamar al BANCO ANDINO.", 9f);
@@ -74,7 +88,11 @@ namespace AndesSim.Scenario05
 
         public void Finish()
         {
-            AudioManager.P(feed != null && feed.Sum(OrderStatus.Pagada) <= 0.01f ? Sfx.Success : Sfx.Fail);
+            bool clean = feed != null && feed.Sum(OrderStatus.Pagada) <= 0.01f;
+            AudioManager.P(clean ? Sfx.Success : Sfx.Fail);
+            AmbienceController.Set(clean ? RoomMood.Secure : RoomMood.Danger);
+            var head = UIManager.I ? UIManager.I.head : null;
+            if (head && clean) FxManager.I?.Burst(head.position + head.forward * 2f, Palette.Secure, 50, 2.4f);
             GameManager.I?.EndScenario();
         }
     }

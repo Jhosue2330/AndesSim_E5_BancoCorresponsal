@@ -29,11 +29,19 @@ namespace AndesSim
             {
                 if (introTitle) introTitle.text = $"ESCENARIO {gm.data.scenarioNumber:00} · {gm.data.scenarioName.ToUpperInvariant()}";
                 if (introBody) introBody.text =
-                    $"<color=#ffc24a>{gm.data.dateRange}</color>\n" +
+                    $"<color={Palette.Hex(Palette.Warning)}>{gm.data.dateRange} · TRANSMISIÓN CLASIFICADA</color>\n" +
                     gm.data.story + "\n" +
-                    "<color=#38f28a>" + gm.data.playerGoal + "</color>\n" +
-                    "<size=85%><color=#9fb5aa>Mira un botón y toca la pantalla (o sigue mirando 2 s) para entrar.</color></size>";
+                    $"<color={Palette.Hex(Palette.Secure)}>" + gm.data.playerGoal + "</color>\n" +
+                    $"<size=85%><color={Palette.Hex(Palette.InkDim)}>Mira un botón y toca la pantalla (o sigue mirando 2 s) para entrar.</color></size>";
             }
+            StartCoroutine(TypeIntro());
+        }
+
+        System.Collections.IEnumerator TypeIntro()
+        {
+            yield return new WaitForSeconds(1.0f); // espera el fundido inicial
+            var tw = introBody ? introBody.GetComponent<Typewriter>() : null;
+            if (tw) tw.Play();
         }
 
         void Update()
@@ -54,7 +62,8 @@ namespace AndesSim
 
         IEnumerator CrossRoutine()
         {
-            AudioManager.P(Sfx.Teleport);
+            AudioManager.P(Sfx.Whoosh);
+            FxManager.I?.Burst(portalRing ? portalRing.position : transform.position, Palette.Violet, 40, 3f);
             yield return new WaitForSeconds(crossDelay);
             if (destination) destination.TeleportHere();
             yield return new WaitForSeconds(0.3f);
