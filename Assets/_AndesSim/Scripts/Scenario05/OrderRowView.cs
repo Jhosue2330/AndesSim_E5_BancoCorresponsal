@@ -69,21 +69,21 @@ namespace AndesSim.Scenario05
 
         protected override void Entered()
         {
-            if (order == null || order.status == OrderStatus.EnTransito || order.status == OrderStatus.NoReenviada) return;
-            UIManager.Msg($"EXPEDIENTE · ORDEN #{order.number:00} · {order.AmountText}", Dossier(), 4f);
+            if (order == null) return;
+            if (order.status == OrderStatus.EnRevision)
+                UIManager.Msg($"#{order.number:00} · {order.AmountText}", Tags() + $"\n<color={W}>› TOCA PARA BLOQUEAR</color>", 2.5f);
+            else if (IsFandation && order.status != OrderStatus.EnTransito)
+                UIManager.Msg($"#{order.number:00} · ¿FANDATION?", $"<color={W}>› TOCA: LUPA</color>", 2.5f);
         }
 
-        /// <summary>Ficha de la orden con sus "banderas rojas" (lo que un analista debería notar).</summary>
-        string Dossier()
+        /// <summary>Banderas rojas en etiquetas cortas.</summary>
+        string Tags()
         {
-            var flags = new System.Collections.Generic.List<string> { "beneficiario nunca usado" };
-            if (order.amountMillions >= 5f) flags.Add("monto inusual para una persona o fundación");
-            if (order.address.ToUpperInvariant().Contains("JUPITER")) flags.Add("«JUPITER» en la dirección (lista de sanciones)");
-            if (order.beneficiary.ToUpperInvariant().Contains("FANDATION")) flags.Add("nombre mal escrito: «FANDATION»");
-            string action = order.status == OrderStatus.EnRevision ? $"<color={W}>›› Toca para BLOQUEAR</color>"
-                : IsFandation ? $"<color={W}>›› Toca para examinar el nombre con la LUPA</color>" : "";
-            return $"<b>{order.beneficiary}</b> · {order.beneficiaryBank}\n{order.address} ({order.country})\n" +
-                   $"<color={Palette.Hex(Palette.Threat)}>Banderas rojas:</color> " + string.Join(" · ", flags) + "\n" + action;
+            var t = new System.Collections.Generic.List<string> { "NUEVO" };
+            if (order.amountMillions >= 5f) t.Add("MONTO ALTO");
+            if (order.address.ToUpperInvariant().Contains("JUPITER")) t.Add("JUPITER");
+            if (IsFandation) t.Add("FANDATION");
+            return $"<color={Palette.Hex(Palette.Threat)}>" + string.Join(" · ", t) + "</color>";
         }
 
         bool IsFandation => order != null && order.beneficiary.ToUpperInvariant().Contains("FANDATION");

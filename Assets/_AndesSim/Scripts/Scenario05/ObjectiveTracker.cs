@@ -48,12 +48,12 @@ namespace AndesSim.Scenario05
             steps.Clear();
             bool defense = gm != null && gm.mode == SimMode.Defensa;
             if (defense)
-                Add(() => gm.DefenseCount >= 3, () => $"Activa las 3 defensas en el panel ({gm.DefenseCount}/3)");
-            Add(() => feed && (feed.Running || feed.Finished), () => "Inicia el monitoreo (botón verde)");
-            Add(() => feed && feed.alert && feed.alert.Triggered, () => "Vigila las pantallas y la mesa holográfica");
-            Add(() => feed && feed.BlockedByPlayer >= 3, () => $"Bloquea órdenes EN REVISIÓN mirándolas ({(feed ? feed.BlockedByPlayer : 0)}/3)");
-            Add(() => gm.EvidenceCount >= gm.TotalEvidence, () => $"Encuentra las evidencias ({gm.EvidenceCount}/{gm.TotalEvidence})");
-            Add(() => phone && phone.CallDone, () => "Llama al BANCO ANDINO (escritorio)");
+                Add(() => gm.DefenseCount >= 3, () => $"Activa defensas  {gm.DefenseCount}/3");
+            Add(() => feed && (feed.Running || feed.Finished), () => "Toca INICIAR");
+            Add(() => feed && feed.alert && feed.alert.Triggered, () => "Vigila la mesa");
+            Add(() => feed && feed.BlockedByPlayer >= 3, () => $"Bloquea órdenes ámbar  {(feed ? feed.BlockedByPlayer : 0)}/3");
+            Add(() => gm.EvidenceCount >= gm.TotalEvidence || (phone && phone.CallDone), () => $"Busca evidencias  {gm.EvidenceCount}/{gm.TotalEvidence}");
+            Add(() => phone && phone.CallDone, () => "Llama al banco");
             Add(() => gm.HasEnded, () => "Ver resultado");
             built = true;
             if (panel)
@@ -61,7 +61,7 @@ namespace AndesSim.Scenario05
                 panel.gameObject.SetActive(true);
                 SnapInFront();
             }
-            if (header) header.text = defense ? "MISIÓN · DEFENDER EL CORRESPONSAL" : "MISIÓN · REVIVIR EL ATAQUE 2016";
+            if (header) header.text = defense ? "MISIÓN · DEFENSA" : "MISIÓN · ATAQUE 2016";
         }
 
         void Add(Func<bool> done, Func<string> label) => steps.Add(new Step { done = done, label = label });
@@ -94,18 +94,12 @@ namespace AndesSim.Scenario05
 
         void Refresh()
         {
-            var sb = new StringBuilder();
             int current = -1;
-            string ok = Palette.Hex(Palette.Secure), now = Palette.Hex(Palette.Warning), dim = Palette.Hex(Palette.InkDim);
-            for (int i = 0; i < steps.Count; i++)
-            {
-                bool d = steps[i].done();
-                if (!d && current < 0) current = i;
-                if (d) sb.Append($"<color={ok}>•  <s>{steps[i].label()}</s></color>\n");
-                else if (i == current) sb.Append($"<color={now}><b>›  {steps[i].label()}</b></color>\n");
-                else sb.Append($"<color={dim}>–  {steps[i].label()}</color>\n");
-            }
-            if (body) body.text = sb.ToString();
+            for (int i = 0; i < steps.Count; i++) if (!steps[i].done()) { current = i; break; }
+            // Solo el objetivo actual, grande: en VR se lee de un vistazo
+            if (body) body.text = current < 0
+                ? $"<color={Palette.Hex(Palette.Secure)}>MISIÓN CUMPLIDA</color>"
+                : $"<color={Palette.Hex(Palette.Warning)}><b>› {steps[current].label()}</b></color>\n<size=60%><color={Palette.Hex(Palette.InkDim)}>PASO {current + 1}/{steps.Count}</color></size>";
             if (current != lastCurrent && lastCurrent >= 0)
             {
                 AudioManager.P(Sfx.Evidence, 0.4f);

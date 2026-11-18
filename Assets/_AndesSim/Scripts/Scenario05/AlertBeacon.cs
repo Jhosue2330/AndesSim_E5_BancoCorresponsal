@@ -42,7 +42,7 @@ namespace AndesSim.Scenario05
             }
             UIManager.I?.HideMessage(); // la alerta manda: se limpia la pantalla
             AmbienceController.Set(RoomMood.Alert);
-            FxManager.Title("ALERTA · LISTA DE SANCIONES", $"Coincidencia «{term}» en la dirección del beneficiario", Palette.Threat);
+            FxManager.Title("¡ALERTA!", $"«{term}» en lista de sanciones", Palette.Threat);
             StartCoroutine(Blink());
         }
 

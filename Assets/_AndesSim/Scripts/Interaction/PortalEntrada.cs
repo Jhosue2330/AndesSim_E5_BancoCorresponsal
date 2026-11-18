@@ -30,12 +30,12 @@ namespace AndesSim
             var gm = GameManager.I;
             if (gm != null && gm.data != null)
             {
-                if (introTitle) introTitle.text = $"ESCENARIO {gm.data.scenarioNumber:00} · {gm.data.scenarioName.ToUpperInvariant()}";
+                if (introTitle) introTitle.text = "ESCENARIO 05 · BANCO CORRESPONSAL";
                 if (introBody) introBody.text =
-                    $"<color={Palette.Hex(Palette.Warning)}>{gm.data.dateRange} · TRANSMISIÓN CLASIFICADA</color>\n" +
-                    gm.data.story + "\n" +
-                    $"<color={Palette.Hex(Palette.Secure)}>" + gm.data.playerGoal + "</color>\n" +
-                    $"<size=85%><color={Palette.Hex(Palette.InkDim)}>Mira un botón y toca la pantalla (o sigue mirando 2 s) para entrar.</color></size>";
+                    $"<color={Palette.Hex(Palette.Warning)}>4 FEB 2016 · US$ 951 M EN JUEGO</color>\n" +
+                    "Lazarus envía órdenes falsas.\n" +
+                    $"<color={Palette.Hex(Palette.Secure)}><b>¿Puedes detenerlas?</b></color>\n" +
+                    $"<size=70%><color={Palette.Hex(Palette.InkDim)}>Mira un botón y toca</color></size>";
             }
             StartCoroutine(TypeIntro());
         }

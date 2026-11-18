@@ -549,7 +549,7 @@ namespace AndesSim.EditorTools
         /// <summary>Panel de misión que acompaña al jugador.</summary>
         static void BuildObjectiveTracker(GameObject feedGo, OrderFeed feed, CallbackDefense phone, Scenario05Controller ctrl)
         {
-            var c = MakeCanvas("UI_Mision", null, new Vector3(0, 1, -5), Quaternion.identity, new Vector2(1000, 380), 0.0011f);
+            var c = MakeCanvas("UI_Mision", null, new Vector3(0, 1, -5), Quaternion.identity, new Vector2(900, 240), 0.0011f);
             Img(c, "Borde", Palette.WithAlpha(Palette.Data, 0.7f), Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             Img(c, "Fondo", Palette.Panel, Vector2.zero, Vector2.one, new Vector2(3, 3), new Vector2(-3, -3));
             Img(c, "Franja", Palette.WithAlpha(Palette.Data, 0.18f), new Vector2(0, 1), new Vector2(1, 1), new Vector2(3, -64), new Vector2(-3, -3));
@@ -557,8 +557,8 @@ namespace AndesSim.EditorTools
             tr.panel = c; tr.feed = feed; tr.phone = phone; tr.controller = ctrl;
             tr.header = Txt(c, "Titulo", "MISIÓN", 32, Palette.Data, TextAlignmentOptions.MidlineLeft, new Vector2(0, 1), new Vector2(1, 1), new Vector2(24, -62), new Vector2(-24, -4));
             tr.header.characterSpacing = 6; tr.header.fontStyle = FontStyles.Bold;
-            tr.body = Txt(c, "Pasos", "", 30, Palette.Ink, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, new Vector2(24, 14), new Vector2(-24, -76));
-            tr.body.lineSpacing = 4; tr.body.enableAutoSizing = true; tr.body.fontSizeMin = 20; tr.body.fontSizeMax = 30;
+            tr.body = Txt(c, "Pasos", "", 46, Palette.Ink, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, new Vector2(24, 10), new Vector2(-24, -70));
+            tr.body.lineSpacing = 0; tr.body.enableAutoSizing = true; tr.body.fontSizeMin = 28; tr.body.fontSizeMax = 46;
         }
 
         // ======================================================================

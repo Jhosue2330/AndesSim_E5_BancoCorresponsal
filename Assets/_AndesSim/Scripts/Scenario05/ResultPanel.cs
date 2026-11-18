@@ -24,41 +24,26 @@ namespace AndesSim.Scenario05
             float total = feed ? feed.TotalAmount : 951f;
             float lost = feed ? feed.Sum(OrderStatus.Pagada, OrderStatus.EnTransito) : RealPaid;
             float saved = total - lost;
-            bool ok = lost <= 0.01f;
-
             Achievements.I?.EvaluateEnd(lost);
             var (score, letter, color) = Grade(gm, lost);
-            sb.AppendLine($"<size=320%><b><color={Palette.Hex(color)}>{letter}</color></b></size><voffset=0.6em>  CALIFICACIÓN DEL ANALISTA · <b>{score}</b>/100</voffset>");
-            sb.AppendLine($"<size=120%>Salvado: <color={Palette.Hex(Palette.Secure)}>US$ {saved:0} M</color>   ·   Perdido: <color={Palette.Hex(Palette.Threat)}>US$ {lost:0} M</color></size>");
-            if (feed)
-            {
-                sb.AppendLine($"Pagadas {feed.Count(OrderStatus.Pagada)} · Congeladas {feed.Count(OrderStatus.Bloqueada)} · " +
-                              $"Retenidas {feed.Count(OrderStatus.Retenida)} · No reenviadas {feed.Count(OrderStatus.NoReenviada)}");
-                sb.AppendLine($"Órdenes que bloqueaste tú: {feed.BlockedByPlayer}");
-            }
+            // Poco texto: nota gigante, dos números y los logros. Lo técnico vive en «VER ANÁLISIS».
+            sb.AppendLine($"<align=center><size=420%><b><color={Palette.Hex(color)}>{letter}</color></b></size>");
+            sb.AppendLine($"<size=90%><color={Palette.Hex(Palette.InkDim)}>ANALISTA · {score}/100</color></size>");
             sb.AppendLine();
-            if (gm.mode == SimMode.Ataque)
-            {
-                sb.AppendLine($"<color={Palette.Hex(Palette.Threat)}>Así pasó en 2016:</color>"+" la alerta «JUPITER» congeló 30 órdenes, pero 5 ya se habían pagado " +
-                              "(4 a Manila por US$81 M y 1 a la «Fandation» por US$20 M). Nadie contestó en el BANCO ANDINO: era fin de semana.");
-                sb.AppendLine("<b>Vulnerabilidades:</b> contactos solo en días hábiles · sin confirmación por canal alterno · sin reglas por destino ni monto.");
-                sb.AppendLine($"<color={Palette.Hex(Palette.Warning)}>Mira «VER ANÁLISIS» para entender por qué funcionó el ataque.</color>");
-            }
-            else
-            {
-                sb.AppendLine(ok
-                    ? $"<color={Palette.Hex(Palette.Secure)}>Defensa exitosa:</color>"+" las 5 órdenes que en 2016 se pagaron quedaron RETENIDAS."
-                    : $"<color={Palette.Hex(Palette.Warning)}>Defensa incompleta:</color>"+" todavía salió dinero. Revisa qué controles faltó activar.");
-                sb.AppendLine($"Defensas aplicadas: {gm.DefenseCount}/{gm.TotalDefenses}  ·  2016 sin defensas: perdido US$ {RealPaid:0} M.");
-            }
-            sb.AppendLine($"Evidencias encontradas: {gm.EvidenceCount}/{gm.TotalEvidence}");
+            sb.AppendLine($"<size=150%><color={Palette.Hex(Palette.Secure)}>US$ {saved:0} M</color>   <color={Palette.Hex(Palette.Threat)}>−US$ {lost:0} M</color></size>");
+            sb.AppendLine($"<size=80%><color={Palette.Hex(Palette.InkDim)}>SALVADO                          PERDIDO</color></size>");
+            sb.AppendLine();
+            sb.AppendLine(gm.mode == SimMode.Ataque
+                ? $"<color={Palette.Hex(Palette.Threat)}>En 2016 nadie contestó el teléfono.</color>"
+                : lost <= 0.01f ? $"<color={Palette.Hex(Palette.Secure)}>¡Defensa perfecta!</color>"
+                                : $"<color={Palette.Hex(Palette.Warning)}>Faltaron defensas.</color>");
             if (Achievements.I != null)
             {
                 float t = Achievements.I.Elapsed;
-                sb.AppendLine($"Tiempo de misión: {(int)t / 60}:{(int)t % 60:00}");
                 sb.AppendLine();
-                sb.AppendLine(Achievements.I.Summary());
+                sb.AppendLine($"<size=85%>{Achievements.I.Summary()}   ·   {(int)t / 60}:{(int)t % 60:00}</size>");
             }
+            sb.Append("</align>");
             return sb.ToString();
         }
 

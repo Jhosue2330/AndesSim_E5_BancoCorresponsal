@@ -39,7 +39,7 @@ namespace AndesSim
             var gm = GameManager.I;
             bool isNew = gm != null && !gm.HasEvidence(evidenceId);
             gm?.RegisterEvidence(evidenceId);
-            UIManager.Msg((isNew ? "EVIDENCIA · " : "") + title, description, 7f);
+            UIManager.Msg((gm != null ? $"EVIDENCIA {gm.EvidenceCount}/{gm.TotalEvidence} · " : "") + title, description, 4f);
             if (!Found)
             {
                 Found = true;
@@ -49,7 +49,7 @@ namespace AndesSim
                 if (foundMarker) foundMarker.SetActive(true);
                 Vector3 top = GetComponent<Collider>().bounds.center + Vector3.up * 0.25f;
                 FxManager.I?.Burst(top, Palette.Warning, 16, 1.4f);
-                if (gm != null) FxManager.Float(top, $"+1 EVIDENCIA  {gm.EvidenceCount}/{gm.TotalEvidence}", Palette.Warning);
+                FxManager.Float(top, "+1", Palette.Warning);
                 if (!inspectable) StartCoroutine(Pop());
             }
             if (inspectable && !inspecting) StartCoroutine(Inspect());

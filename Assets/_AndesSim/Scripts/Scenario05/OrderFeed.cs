@@ -99,7 +99,6 @@ namespace AndesSim.Scenario05
                     {
                         string why = SanctionsMatcher.Explain(o, term);
                         alert.Trigger(term, why);
-                        StartCoroutine(DelayedMsg(3.4f, "ALERTA · LISTA DE SANCIONES", why + "\n\nMira las órdenes EN REVISIÓN y toca para bloquearlas.", 9f));
                         AlertTriggered?.Invoke(o, term);
                     }
                     StartCoroutine(AutoFreeze(o, OrderStatus.Bloqueada));
@@ -158,20 +157,18 @@ namespace AndesSim.Scenario05
                     Haptics.Confirm();
                     break;
                 case OrderStatus.EnTransito:
-                    UIManager.Msg($"ORDEN #{o.number:00} · SIN ALERTA",
-                        "No hay ninguna regla que la detenga: sin límites por destino ni por monto inusual, el sistema la trata como válida y la paga.", 5f);
+                    UIManager.Msg("SIN ALERTA", "Ninguna regla la detiene.", 2.5f);
                     AudioManager.P(Sfx.Fail, 0.5f);
                     break;
                 case OrderStatus.Pagada:
-                    UIManager.Msg($"ORDEN #{o.number:00} · YA PAGADA",
-                        "El dinero ya salió. Solo el BANCO ANDINO puede confirmar que es un fraude: llama por teléfono.", 5f);
+                    UIManager.Msg("YA PAGADA", "El dinero salió. ¡Llama al banco!", 2.5f);
                     AudioManager.P(Sfx.Fail, 0.5f);
                     break;
                 case OrderStatus.NoReenviada:
-                    UIManager.Msg($"ORDEN #{o.number:00}", o.flagReason, 4f);
+                    UIManager.Msg("NO REENVIADA", "Rechazada por formato.", 2f);
                     break;
                 default:
-                    UIManager.Msg($"ORDEN #{o.number:00}", "Esta orden ya está detenida.", 2.5f);
+                    UIManager.Msg("YA DETENIDA", "", 1.5f);
                     break;
             }
         }

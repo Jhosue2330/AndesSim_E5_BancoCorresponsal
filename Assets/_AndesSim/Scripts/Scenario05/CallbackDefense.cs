@@ -49,7 +49,7 @@ namespace AndesSim.Scenario05
             bool has247 = gm.mode == SimMode.Defensa && gm.HasDefense(Contacts247);
             bool hasRegistered = gm.mode == SimMode.Defensa && gm.HasDefense(RegisteredNumber);
             string number = hasRegistered && data != null ? data.andinoEmergencyNumber : "número del mensaje SWIFT";
-            UIManager.Msg("LLAMANDO AL BANCO ANDINO", $"Sábado 6 feb 2016 · {number}", rings * ringSeconds + 0.5f);
+            UIManager.Msg("LLAMANDO…", "BANCO ANDINO · sáb 6 feb", rings * ringSeconds + 0.5f);
 
             int n = has247 && hasRegistered ? 2 : rings;
             for (int i = 0; i < n; i++)
@@ -77,23 +77,22 @@ namespace AndesSim.Scenario05
                 int recalled = feed ? feed.RecallAfterVerification() : 0;
                 AmbienceController.Set(RoomMood.Secure);
                 FxManager.I?.Burst(top, Palette.Secure, 30, 2f);
-                FxManager.Float(top, "FRAUDE CONFIRMADO · ÓRDENES RETENIDAS", Palette.Secure);
-                UIManager.Msg("VERIFICACIÓN COMPLETADA",
-                    (data ? data.callVerifiedText : "Órdenes retenidas.") + (recalled > 0 ? $"\n({recalled} órdenes pagadas volvieron a RETENIDA)" : "\n(Tus reglas ya las tenían retenidas: la llamada confirma el fraude.)"), 8f);
+                FxManager.Float(top, "FRAUDE CONFIRMADO", Palette.Secure);
+                UIManager.Msg("VERIFICADO", recalled > 0 ? $"{recalled} órdenes recuperadas" : "Órdenes retenidas", 3f);
             }
             else
             {
                 AudioManager.At(Sfx.PhoneNoAnswer, transform.position);
                 Haptics.Warn();
                 AmbienceController.Set(RoomMood.Danger);
-                FxManager.Float(top, "SIN RESPUESTA · FIN DE SEMANA", Palette.Threat);
-                string why = data ? data.callNoAnswerText : "Nadie contesta.";
+                FxManager.Float(top, "SIN RESPUESTA", Palette.Threat);
+                string why = "Fin de semana: nadie atiende.";
                 if (gm.mode == SimMode.Defensa)
                 {
-                    if (!has247) why += "\n<color=#ffd166>Falta activar: Contactos 24/7.</color>";
-                    if (!hasRegistered) why += "\n<color=#ffd166>Falta activar: Número registrado (canal alterno).</color>";
+                    if (!has247) why += $"\n<color={Palette.Hex(Palette.Warning)}>Falta: Contactos 24/7</color>";
+                    if (!hasRegistered) why += $"\n<color={Palette.Hex(Palette.Warning)}>Falta: Número registrado</color>";
                 }
-                UIManager.Msg("SIN RESPUESTA", why, 8f);
+                UIManager.Msg("SIN RESPUESTA", why, 3.5f);
             }
 
             if (dialog) dialog.Hide();
@@ -108,26 +107,26 @@ namespace AndesSim.Scenario05
         /// </summary>
         IEnumerator Conversation()
         {
-            const string who = "LÍNEA 24/7 · BANCO ANDINO";
+            const string who = "BANCO ANDINO · 24/7";
             bool askedOrders = false, askedFandation = false;
             string[] options =
             {
-                "¿Ustedes autorizaron 36 órdenes por US$951 M?",
-                "¿«SHALIKA FANDATION» es cliente suyo?",
-                "Retengan y anulen todo. Confirmamos por escrito."
+                "¿Enviaron 36 órdenes?",
+                "¿Conocen a «FANDATION»?",
+                "¡Retengan todo!"
             };
-            string text = "Línea de incidentes del BANCO ANDINO, buenas noches. ¿En qué podemos ayudar?";
+            string text = "Línea 24/7, BANCO ANDINO. ¿Diga?";
             while (true)
             {
                 int pick = -1;
                 yield return dialog.Ask(who, text, options, i => pick = i);
                 AudioManager.P(Sfx.Click);
-                if (pick == 0) { askedOrders = true; text = "No. Nuestra mesa de pagos no emitió ninguna orden esta noche. Esas órdenes NO son nuestras."; }
-                else if (pick == 1) { askedFandation = true; text = "No existe en nuestros registros… y «Fandation» está mal escrito. Es una señal clara de fraude."; }
+                if (pick == 0) { askedOrders = true; text = "No. Esas órdenes NO son nuestras."; }
+                else if (pick == 1) { askedFandation = true; text = "No existe. Y está mal escrito."; }
                 else break;
             }
             if (askedOrders && askedFandation) Achievements.Unlock("preguntas");
-            yield return dialog.Say(who, "Entendido: retengan todo. Enviamos la confirmación por el canal registrado.", 2.5f);
+            yield return dialog.Say(who, "Retenido. Confirmamos por escrito.", 2f);
         }
     }
 }

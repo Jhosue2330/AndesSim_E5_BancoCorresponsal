@@ -45,9 +45,9 @@ namespace AndesSim.Scenario05
             }
             UIManager.I?.HideMessage();
             root.gameObject.SetActive(true);
-            title.text = $"LUPA · ORDEN #{order.number:00} · {order.AmountText} · {order.country}";
-            hint.text = Solved ? $"<color={Palette.Hex(Palette.Secure)}>Ya encontraste el error: FANDATION ≠ FOUNDATION.</color>"
-                               : "Una letra está mal. Míralo con calma… y toca la letra equivocada.";
+            title.text = $"LUPA · {order.AmountText}";
+            hint.text = Solved ? $"<color={Palette.Hex(Palette.Secure)}>FANDATION ≠ FOUNDATION</color>"
+                               : "Una letra está mal. ¡Tócala!";
             Build();
             AudioManager.P(Sfx.Swoosh);
         }
@@ -92,7 +92,7 @@ namespace AndesSim.Scenario05
             {
                 Solved = true;
                 img.color = Palette.Threat;
-                hint.text = $"<color={Palette.Hex(Palette.Secure)}>¡Exacto! «FANDATION» ≠ «FOUNDATION».</color> Un banco intermediario notó este error y detuvo US$20 M.";
+                hint.text = $"<color={Palette.Hex(Palette.Secure)}>¡EXACTO! FANDATION ≠ FOUNDATION</color>";
                 AudioManager.P(Sfx.Achievement);
                 Haptics.Confirm();
                 FxManager.I?.Burst(rt.position, Palette.Warning, 30, 1.8f);

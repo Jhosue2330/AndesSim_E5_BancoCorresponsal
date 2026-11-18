@@ -34,11 +34,11 @@ namespace AndesSim
             if (gm == null) return;
             if (gm.mode == SimMode.Ataque)
             {
-                UIManager.Msg("NO DISPONIBLE EN 2016", $"«{title}» no existía la noche del ataque. Prueba el modo Defensa.", 4f);
+                UIManager.Msg("SOLO EN MODO DEFENSA", "En 2016 no existía.", 2.5f);
                 AudioManager.P(Sfx.Fail, 0.5f);
                 return;
             }
-            if (IsActive) { UIManager.Msg(title + " · ACTIVA", description, 4f); return; }
+            if (IsActive) { UIManager.Msg(title + " · ACTIVA", "", 1.5f); return; }
             Activate();
         }
 
@@ -59,8 +59,8 @@ namespace AndesSim
             Vector3 top = GetComponent<Collider>().bounds.center + Vector3.up * 0.35f;
             FxManager.I?.Burst(top, Palette.Secure, 20, 1.6f);
             var gm = GameManager.I;
-            if (gm != null) FxManager.Float(top + Vector3.up * 0.1f, $"DEFENSA ACTIVA  {gm.DefenseCount}/{gm.TotalDefenses}", Palette.Secure);
-            UIManager.Msg("DEFENSA ACTIVADA · " + title, description, 6f);
+            if (gm != null) FxManager.Float(top + Vector3.up * 0.1f, $"{gm.DefenseCount}/{gm.TotalDefenses}", Palette.Secure);
+            UIManager.Msg("DEFENSA ACTIVA · " + title, description, 3f);
         }
     }
 }

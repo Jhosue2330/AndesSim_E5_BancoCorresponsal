@@ -201,7 +201,7 @@ namespace AndesSim.EditorTools
             alert.banner = bannerCanvas.gameObject;
             // La base de la baliza es la evidencia (se puede mirar cuando la alerta se activa).
             housing.transform.localScale = new Vector3(1.2f, 0.35f, 0.5f);
-            alert.evidence = Evidence(housing, "alerta_jupiter", "Alerta de sanciones «JUPITER»", "La alerta aún no se activa.");
+            alert.evidence = Evidence(housing, "alerta_jupiter", "Alerta «JUPITER»", "Aún no se activa.");
             feed.alert = alert;
 
             // ---------- panel de defensas (izquierda) ----------
@@ -216,9 +216,9 @@ namespace AndesSim.EditorTools
             Txt(panelCanvas, "Titulo", "PANEL DE CONTROLES · DEFENSAS", 48, Palette.Secure, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, new Vector2(20, 0), new Vector2(-20, 0));
             string[,] defs =
             {
-                { CallbackDefense.Contacts247, "Contactos 24/7", "El BANCO ANDINO registra una línea de incidentes que atiende las 24 horas, los 7 días. Ya no importa que sea fin de semana." },
-                { CallbackDefense.RegisteredNumber, "Número registrado", "Ante una orden dudosa se confirma llamando a un número registrado de antemano (canal alterno), no respondiendo por el mismo canal SWIFT." },
-                { PaymentRules.DefenseId, "Reglas destino y monto", "Retiene órdenes grandes a beneficiarios nunca usados o a destinos poco habituales hasta confirmarlas. Así no pasan las 5 primeras." }
+                { CallbackDefense.Contacts247, "Contactos 24/7", "El banco atiende siempre." },
+                { CallbackDefense.RegisteredNumber, "Número registrado", "Confirmar por teléfono, no por SWIFT." },
+                { PaymentRules.DefenseId, "Reglas destino y monto", "Retiene montos altos a destinos nuevos." }
             };
             for (int i = 0; i < 3; i++)
             {
@@ -240,8 +240,7 @@ namespace AndesSim.EditorTools
                 Txt(lbl, "Texto", defs[i, 1].ToUpperInvariant(), 34, Ink, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             }
             var manual = Prim(PrimitiveType.Cube, "Manual_Reglas", panelRoot, panelRoot.TransformPoint(new Vector3(1.2f, 1.13f, 0.15f)), new Vector3(0.3f, 0.06f, 0.4f), mPaper, panelRoot.eulerAngles);
-            Evidence(manual, "manual_reglas", "Manual de reglas de pago",
-                "El corresponsal revisa el FORMATO del mensaje y la LISTA DE SANCIONES. No hay límites por monto, por destino ni por beneficiario nuevo.\n<color=#ffc24a>Vulnerabilidad:</color> por eso las 5 primeras órdenes pasaron sin alerta.");
+            Evidence(manual, "manual_reglas", "Manual de pagos", "Sin límites de monto ni destino.");
 
             // ---------- escritorio con teléfono (derecha) ----------
             var deskRoot = new GameObject("Escritorio_Analista").transform;
@@ -269,15 +268,12 @@ namespace AndesSim.EditorTools
             Txt(phoneLbl, "Texto", "TELÉFONO · BANCO ANDINO", 36, Palette.Warning, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
             var sanctions = Prim(PrimitiveType.Cube, "Lista_Sanciones", deskRoot, deskRoot.TransformPoint(new Vector3(-0.2f, 0.8f, -0.1f)), new Vector3(0.3f, 0.01f, 0.4f), mPaper, deskRoot.eulerAngles);
-            Evidence(sanctions, "lista_sanciones", "Lista de sanciones (ficticia)",
-                "Incluye al petrolero «M/T JUPITER». El sistema compara palabras: cualquier orden cuyo texto contenga «JUPITER» se detiene para revisión, aunque sea el nombre de una calle.");
+            Evidence(sanctions, "lista_sanciones", "Lista de sanciones", "«JUPITER» = petrolero sancionado.");
             var directory = Prim(PrimitiveType.Cube, "Directorio_Contactos", deskRoot, deskRoot.TransformPoint(new Vector3(-0.75f, 0.8f, 0.05f)), new Vector3(0.3f, 0.02f, 0.4f), mPaper, deskRoot.eulerAngles);
-            Evidence(directory, "directorio_contactos", "Directorio de contactos del BANCO ANDINO",
-                "Mesa de pagos internacionales: lunes a viernes, 09:00–17:00. No hay número de emergencia fuera de horario.\n<color=#ffc24a>Vulnerabilidad:</color> contactos solo en días hábiles.");
+            Evidence(directory, "directorio_contactos", "Directorio del banco", "Solo lun–vie. Sin emergencias.");
 
             var calendar = Prim(PrimitiveType.Cube, "Calendario", room, new Vector3(6.97f, 2.1f, -2.6f), new Vector3(0.04f, 0.9f, 0.7f), mPaper);
-            Evidence(calendar, "calendario", "Calendario · febrero 2016",
-                "El ataque empezó el jueves 4 por la noche. El viernes 5 y el sábado 6 el BANCO ANDINO está cerrado por fin de semana, y el lunes 8 es feriado en el país receptor (Año Nuevo chino). Lazarus eligió esas fechas a propósito.");
+            Evidence(calendar, "calendario", "Calendario", "Jueves noche + fin de semana + feriado.");
             var calCanvas = MakeCanvas("Calendario_Texto", room, new Vector3(6.94f, 2.1f, -2.6f), Quaternion.Euler(0, 90, 0), new Vector2(340, 440), 0.002f);
             Txt(calCanvas, "Texto", "<size=70%>FEBRERO 2016</size>\n<b>JUE 4</b>\n<color=#c0392b>VIE 5\nSÁB 6</color>\nDOM 7\n<color=#c0392b>LUN 8</color>", 52, new Color(0.1f, 0.1f, 0.1f), TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
@@ -343,13 +339,22 @@ namespace AndesSim.EditorTools
             Img(end, "Borde", Amber, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             Img(end, "Fondo", new Color(0.01f, 0.04f, 0.03f, 0.98f), Vector2.zero, Vector2.one, new Vector2(5, 5), new Vector2(-5, -5));
             ui.endTitle = Txt(end, "Titulo", "RESULTADO", 56, Amber, TextAlignmentOptions.Top, new Vector2(0, 1), new Vector2(1, 1), new Vector2(30, -110), new Vector2(-30, -30));
-            ui.endBody = Txt(end, "Cuerpo", "", 32, Ink, TextAlignmentOptions.TopLeft, new Vector2(0, 0.16f), new Vector2(0.56f, 1), new Vector2(40, 0), new Vector2(-20, -120));
-            ui.endBody.enableAutoSizing = true; ui.endBody.fontSizeMin = 20; ui.endBody.fontSizeMax = 32;
-            Img(end, "Separador", new Color(0.22f, 0.95f, 0.54f, 0.35f), new Vector2(0.565f, 0.17f), new Vector2(0.565f, 1), new Vector2(-2, 0), new Vector2(2, -125));
-            Txt(end, "CreditosTitulo", "CRÉDITOS", 30, Green, TextAlignmentOptions.TopLeft, new Vector2(0.58f, 1), new Vector2(1, 1), new Vector2(10, -170), new Vector2(-40, -120));
-            ui.endCredits = Txt(end, "Creditos", data.credits, 22, new Color(0.75f, 0.85f, 0.8f), TextAlignmentOptions.TopLeft, new Vector2(0.58f, 0.16f), new Vector2(1, 1), new Vector2(10, 0), new Vector2(-40, -175));
-            ui.endCredits.enableAutoSizing = false; ui.endCredits.fontSize = 28;
-            ui.endCredits.lineSpacing = 2f; ui.endCredits.characterSpacing = 0.5f;
+            ui.endBody = Txt(end, "Cuerpo", "", 40, Ink, TextAlignmentOptions.Top, new Vector2(0, 0.14f), new Vector2(1, 1), new Vector2(40, 0), new Vector2(-40, -110));
+            ui.endBody.enableAutoSizing = true; ui.endBody.fontSizeMin = 24; ui.endBody.fontSizeMax = 40;
+
+            // Créditos en su propio panel (siguen dentro de la app, pero no llenan la pantalla final)
+            var cr = MakeCanvas("UI_Creditos", null, new Vector3(-20, 1.6f, -6), Quaternion.identity, new Vector2(1500, 1150), 0.0017f);
+            Img(cr, "Borde", Palette.WithAlpha(Palette.Data, 0.8f), Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            Img(cr, "Fondo", Palette.Panel, Vector2.zero, Vector2.one, new Vector2(5, 5), new Vector2(-5, -5));
+            Txt(cr, "Titulo", "CRÉDITOS", 52, Palette.Data, TextAlignmentOptions.Top, new Vector2(0, 1), new Vector2(1, 1), new Vector2(30, -100), new Vector2(-30, -26)).characterSpacing = 8;
+            ui.endCredits = Txt(cr, "Creditos", data.credits, 28, Palette.Ink, TextAlignmentOptions.TopLeft, new Vector2(0, 0.12f), new Vector2(1, 1), new Vector2(60, 0), new Vector2(-60, -120));
+            ui.endCredits.enableAutoSizing = true; ui.endCredits.fontSizeMin = 18; ui.endCredits.fontSizeMax = 30; ui.endCredits.lineSpacing = 2f;
+            var credits = cr.gameObject.AddComponent<TimelinePanel>();
+            credits.root = cr.gameObject;
+            var crBack = GazeButton(cr, "VOLVER", Color.Lerp(Palette.Panel, Palette.Data, 0.35f), new Vector2(0, -505), new Vector2(420, 90), 34);
+            UnityEventTools.AddPersistentListener(crBack.onClick, new UnityAction(credits.Back));
+            var rCred = GazeButton(end, "CRÉDITOS", Color.Lerp(Palette.Panel, Palette.Data, 0.35f), new Vector2(760, 560), new Vector2(300, 70), 28);
+            UnityEventTools.AddPersistentListener(rCred.onClick, new UnityAction(credits.Show));
             var rAtk = GazeButton(end, "REPETIR · ATAQUE 2016", BtnRed, new Vector2(-610, -540), new Vector2(560, 120), 34);
             var rAna = GazeButton(end, "VER ANÁLISIS", BtnAmber, new Vector2(0, -540), new Vector2(560, 120), 38);
             var rDef = GazeButton(end, "REPETIR · DEFENSA", BtnGreen, new Vector2(610, -540), new Vector2(560, 120), 34);
@@ -364,20 +369,20 @@ namespace AndesSim.EditorTools
             UnityEventTools.AddPersistentListener(rAna.onClick, new UnityAction(analysis.Show));
             Img(ana, "Borde", Amber, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             Img(ana, "Fondo", new Color(0.01f, 0.04f, 0.03f, 0.98f), Vector2.zero, Vector2.one, new Vector2(5, 5), new Vector2(-5, -5));
-            Txt(ana, "Titulo", "ANÁLISIS TÉCNICO · ¿POR QUÉ FUNCIONÓ EL ATAQUE?", 50, Amber, TextAlignmentOptions.Top, new Vector2(0, 1), new Vector2(1, 1), new Vector2(30, -110), new Vector2(-30, -30));
+            Txt(ana, "Titulo", "ANÁLISIS · ¿POR QUÉ FUNCIONÓ?", 50, Amber, TextAlignmentOptions.Top, new Vector2(0, 1), new Vector2(1, 1), new Vector2(30, -110), new Vector2(-30, -30));
             AnalysisCard(ana, "Card_Vector", new Vector2(0.02f, 0.54f), new Vector2(0.49f, 0.89f), Red,
                 "VECTOR DE ATAQUE",
-                "Lazarus envió órdenes SWIFT (MT103) desde la terminal del BANCO ANDINO con credenciales robadas. Para el corresponsal eran válidas: origen, formato y firma correctos.\n<color=#7dffb0>Defensa →</color> verificar órdenes inusuales fuera de banda.");
+                "Órdenes SWIFT con credenciales robadas.\nParecían legítimas.\n<color=#2BF59A>Defensa →</color> confirmar fuera de banda.");
             AnalysisCard(ana, "Card_Reglas", new Vector2(0.51f, 0.54f), new Vector2(0.98f, 0.89f), Red,
                 "FALLA 1 · SIN REGLAS DE MONTO",
-                "Solo se revisaba el formato y la lista de sanciones. Pagos de US$6 a 30 M a beneficiarios nunca usados no generaban alerta: por eso las 5 primeras órdenes (US$101 M) se pagaron.\n<color=#7dffb0>Defensa →</color> Reglas destino y monto.");
+                "Sin límites de monto ni destino:\nlas 5 primeras se pagaron (US$101 M).\n<color=#2BF59A>Defensa →</color> reglas destino y monto.");
             AnalysisCard(ana, "Card_Jupiter", new Vector2(0.02f, 0.17f), new Vector2(0.49f, 0.52f), Amber,
                 "FALLA 2 · DETECCIÓN POR CASUALIDAD",
-                "Las otras 30 órdenes se frenaron por una coincidencia de texto: «Calle Jupiter» = petrolero sancionado «JUPITER». El screening busca palabras, no fraude; sin esa calle, nada las detenía.\n<color=#7dffb0>Defensa →</color> monitoreo transaccional, no solo listas.");
+                "Las otras 30 se frenaron solo\npor la palabra «JUPITER».\n<color=#2BF59A>Defensa →</color> monitoreo transaccional.");
             AnalysisCard(ana, "Card_Contacto", new Vector2(0.51f, 0.17f), new Vector2(0.98f, 0.52f), Red,
                 "FALLA 3 · NADIE PUDO CONFIRMAR",
-                "El ataque empezó un jueves de noche. El BANCO ANDINO solo atendía en días hábiles y las consultas iban por el mismo canal SWIFT comprometido: el sábado nadie contestó.\n<color=#7dffb0>Defensa →</color> Contactos 24/7 + Número registrado.");
-            Txt(ana, "Conclusion", "Conclusión: el ataque no rompió ningún control del corresponsal, aprovechó que no existían. En el modo Defensa se activan los 3 controles.", 28, Ink, TextAlignmentOptions.Center, new Vector2(0, 0.095f), new Vector2(1, 0.165f), new Vector2(40, 0), new Vector2(-40, 0));
+                "Fin de semana: nadie atendió.\nSin canal alterno.\n<color=#2BF59A>Defensa →</color> línea 24/7 + número registrado.");
+            Txt(ana, "Conclusion", "No rompieron controles: aprovecharon que no existían.", 32, Ink, TextAlignmentOptions.Center, new Vector2(0, 0.095f), new Vector2(1, 0.165f), new Vector2(40, 0), new Vector2(-40, 0));
             var aBack = GazeButton(ana, "VOLVER AL RESULTADO", Color.Lerp(Palette.Panel, Palette.Steel, 0.6f), new Vector2(-620, -560), new Vector2(560, 100), 32);
             var aDef = GazeButton(ana, "VER LA DEFENSA ›", BtnGreen, new Vector2(620, -560), new Vector2(560, 100), 36);
             UnityEventTools.AddPersistentListener(aBack.onClick, new UnityAction(analysis.Back));

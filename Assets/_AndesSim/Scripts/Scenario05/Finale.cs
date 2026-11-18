@@ -26,7 +26,7 @@ namespace AndesSim.Scenario05
             Vector3 p0 = holoContent.position, s0 = holoContent.localScale;
             Vector3 center = head ? new Vector3(head.position.x, 0.06f, head.position.z) + Vector3.ProjectOnPlane(head.forward, Vector3.up).normalized * 1.2f : p0;
             bool attack = GameManager.I == null || GameManager.I.mode == SimMode.Ataque;
-            FxManager.Title("EL VIAJE DEL DINERO", attack ? "Así salieron US$101 M en 2016" : "Con defensas, el dinero nunca salió", attack ? Palette.Threat : Palette.Secure);
+            FxManager.Title("EL VIAJE DEL DINERO", attack ? "−US$ 101 M" : "US$ 0 perdidos", attack ? Palette.Threat : Palette.Secure);
             AudioManager.P(Sfx.Whoosh);
             yield return Ease.Tween(2.2f, k =>
             {

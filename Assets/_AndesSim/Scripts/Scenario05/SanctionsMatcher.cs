@@ -23,11 +23,6 @@ namespace AndesSim.Scenario05
         }
 
         public static string Explain(OrderInfo order, string term) =>
-            $"La dirección del beneficiario «{order.address}» contiene «{term}», el nombre de un petrolero " +
-            "que figura en una lista de sanciones. El sistema de screening detiene la orden para revisión.\n" +
-            "<color=#ffc24a>Ojo:</color> fue una coincidencia de texto con la calle, no una regla contra fraude. " +
-            (GameManager.I != null && GameManager.I.mode == SimMode.Defensa
-                ? "Las 5 órdenes anteriores no tenían esa palabra: las retuvieron tus reglas de destino y monto."
-                : "Las 5 órdenes anteriores no tenían esa palabra y ya se pagaron.");
+            $"«{term}» en la dirección = petrolero sancionado.\nCoincidencia de texto, no regla antifraude.";
     }
 }

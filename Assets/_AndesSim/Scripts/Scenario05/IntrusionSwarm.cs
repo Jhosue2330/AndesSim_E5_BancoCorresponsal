@@ -45,7 +45,7 @@ namespace AndesSim.Scenario05
         {
             domeUp = true;
             AudioManager.At(Sfx.Shield, dome.position, 1.3f);
-            FxManager.Title("FIREWALL ACTIVO", "Reglas de destino y monto retienen las órdenes sospechosas", Palette.Secure);
+            FxManager.Title("FIREWALL ACTIVO", "Intrusión bloqueada", Palette.Secure);
             yield return Ease.Tween(0.9f, k => dome.localScale = Vector3.one * Ease.OutBack(k), Ease.Linear, unscaled: false);
         }
 

@@ -91,7 +91,7 @@ namespace AndesSim.Scenario05
         {
             var got = All.Where(a => unlocked.Contains(a.id)).Select(a => a.title);
             string list = unlocked.Count > 0 ? string.Join(" · ", got) : "ninguno todavía";
-            return $"<b>Logros {unlocked.Count}/{All.Length}:</b> <color={Palette.Hex(Palette.Warning)}>{list}</color>";
+            return $"<color={Palette.Hex(Palette.Warning)}>LOGROS {unlocked.Count}/{All.Length}</color>  {list}";
         }
     }
 }

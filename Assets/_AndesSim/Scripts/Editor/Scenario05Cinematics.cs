@@ -83,16 +83,16 @@ namespace AndesSim.EditorTools
             var tl = MakeCanvas("UI_LineaTiempo", null, new Vector3(-20, 1.6f, -2), Quaternion.identity, new Vector2(1900, 1150), 0.0017f);
             Img(tl, "Borde", Palette.WithAlpha(Palette.Violet, 0.9f), Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             Img(tl, "Fondo", Palette.Panel, Vector2.zero, Vector2.one, new Vector2(5, 5), new Vector2(-5, -5));
-            Txt(tl, "Titulo", "REBOBINADO · LA NOCHE DEL 4 AL 9 DE FEBRERO", 46, Palette.Violet, TextAlignmentOptions.Top, new Vector2(0, 1), new Vector2(1, 1), new Vector2(30, -100), new Vector2(-30, -26)).characterSpacing = 4;
+            Txt(tl, "Titulo", "REBOBINADO · 4 AL 9 FEB", 46, Palette.Violet, TextAlignmentOptions.Top, new Vector2(0, 1), new Vector2(1, 1), new Vector2(30, -100), new Vector2(-30, -26)).characterSpacing = 4;
             Txt(tl, "H1", "MOMENTO", 30, Palette.InkDim, TextAlignmentOptions.TopLeft, new Vector2(0.02f, 1), new Vector2(0.36f, 1), new Vector2(10, -160), new Vector2(0, -110));
             Txt(tl, "H2", "EN 2016", 30, Palette.Threat, TextAlignmentOptions.TopLeft, new Vector2(0.37f, 1), new Vector2(0.67f, 1), new Vector2(10, -160), new Vector2(0, -110));
             Txt(tl, "H3", "CON DEFENSAS", 30, Palette.Secure, TextAlignmentOptions.TopLeft, new Vector2(0.68f, 1), new Vector2(0.98f, 1), new Vector2(10, -160), new Vector2(0, -110));
-            string moments = "JUE 4 · 20:36\nSesión en la terminal SWIFT del BANCO ANDINO\n\nJUE 4 · noche\nLlegan las 5 primeras órdenes\n\nJUE 4 · noche\nCoincidencia «JUPITER»\n\nVIE 5 · 03:59\nTermina la noche\n\nSÁB 6\nLlamada al BANCO ANDINO\n\nLUN 8\nPedido de congelamiento\n\nMAR 9 · 10:24\nRetiro en la agencia receptora";
-            string y2016 = "Credenciales robadas: nadie lo nota\n\n\nSe PAGAN: sin reglas de monto ni destino\n\n\n30 órdenes congeladas (por casualidad)\n\n\nUS$101 M ya salieron\n\n\nNadie contesta: fin de semana\n\n\nFeriado en el país receptor\n\n\nSe retiran US$58 M en efectivo";
-            string yDef = "Igual (ocurre en el banco ordenante)\n\n\nRETENIDAS por reglas de destino y monto\n\n\n30 órdenes congeladas\n\n\nUS$0 salieron\n\n\nLínea 24/7 confirma el fraude\n\n\nYa no hace falta\n\n\nFondos retenidos: no hay retiro";
-            var c1 = Txt(tl, "Momentos", moments, 26, Palette.Ink, TextAlignmentOptions.TopLeft, new Vector2(0.02f, 0.03f), new Vector2(0.36f, 1), new Vector2(10, 0), new Vector2(0, -170));
-            var c2 = Txt(tl, "Col2016", y2016, 26, Color.Lerp(Palette.Ink, Palette.Threat, 0.45f), TextAlignmentOptions.TopLeft, new Vector2(0.37f, 0.03f), new Vector2(0.67f, 1), new Vector2(10, 0), new Vector2(0, -170));
-            var c3 = Txt(tl, "ColDef", yDef, 26, Color.Lerp(Palette.Ink, Palette.Secure, 0.45f), TextAlignmentOptions.TopLeft, new Vector2(0.68f, 0.03f), new Vector2(0.98f, 1), new Vector2(10, 0), new Vector2(0, -170));
+            string moments = "JUE 4 · 20:36\nLlegan 5 órdenes\n\n\nALERTA «JUPITER»\n\n\nVIE 5 · 03:59\n\n\nSÁB 6 · Llamada\n\n\nMAR 9 · Retiro";
+            string y2016 = "Credenciales robadas\nSe PAGAN\n\n\n30 congeladas\n\n\n−US$ 101 M\n\n\nNadie contesta\n\n\n−US$ 58 M en efectivo";
+            string yDef = "Credenciales robadas\nRETENIDAS\n\n\n30 congeladas\n\n\nUS$ 0 perdidos\n\n\nFraude confirmado\n\n\nNo hay retiro";
+            var c1 = Txt(tl, "Momentos", moments, 36, Palette.Ink, TextAlignmentOptions.TopLeft, new Vector2(0.02f, 0.03f), new Vector2(0.36f, 1), new Vector2(10, 0), new Vector2(0, -170));
+            var c2 = Txt(tl, "Col2016", y2016, 36, Color.Lerp(Palette.Ink, Palette.Threat, 0.45f), TextAlignmentOptions.TopLeft, new Vector2(0.37f, 0.03f), new Vector2(0.67f, 1), new Vector2(10, 0), new Vector2(0, -170));
+            var c3 = Txt(tl, "ColDef", yDef, 36, Color.Lerp(Palette.Ink, Palette.Secure, 0.45f), TextAlignmentOptions.TopLeft, new Vector2(0.68f, 0.03f), new Vector2(0.98f, 1), new Vector2(10, 0), new Vector2(0, -170));
             foreach (var c in new[] { c1, c2, c3 }) { c.lineSpacing = 0; c.paragraphSpacing = 0; }
             var panel = feedGo.AddComponent<TimelinePanel>();
             panel.root = tl.gameObject;

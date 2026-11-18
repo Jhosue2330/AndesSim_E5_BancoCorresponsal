@@ -26,11 +26,11 @@ namespace AndesSim.EditorTools
 
             // --- Documentos que vuelan hacia el jugador (con su contenido escrito) ---
             Doc("Lista_Sanciones", "LISTA DE SANCIONES · FICTICIA",
-                "<b>Buques</b>\n• <color=#FF3B4E>M/T JUPITER</color> · petrolero\n• OCEAN STAR VII\n• NEPTUNE CARGO\n• BLUE HORIZON\n\n<size=80%>El sistema detiene cualquier orden cuyo texto contenga uno de estos nombres.</size>");
+                "• <color=#FF3B4E>M/T JUPITER</color>\n• OCEAN STAR VII\n• NEPTUNE CARGO");
             Doc("Directorio_Contactos", "DIRECTORIO · BANCO ANDINO",
-                "Mesa de pagos internacionales\n<b>Lun–Vie 09:00–17:00</b>\n\nEmergencias fuera de horario:\n<color=#FF3B4E>— no registrado —</color>\n\n<size=80%>Sábado y domingo: sin atención.</size>");
+                "Lun–Vie 09:00–17:00\n\nEmergencias:\n<color=#FF3B4E>—</color>");
             Doc("Manual_Reglas", "MANUAL DE PAGOS · CORRESPONSAL",
-                "1. Validar formato MT103\n2. Revisar lista de sanciones\n3. Pagar\n\n<color=#FFB020>Sin límites por monto\nSin control de destino\nSin alerta de beneficiario nuevo</color>");
+                "1. Formato\n2. Sanciones\n3. Pagar\n\n<color=#FFB020>Sin límites</color>");
 
             // --- Lupa «FANDATION» ---
             var lupa = MakeCanvas("UI_Lupa", null, new Vector3(-20, 1.6f, 2), Quaternion.identity, new Vector2(1900, 560), 0.0011f);
@@ -89,8 +89,8 @@ namespace AndesSim.EditorTools
             rt.localScale = new Vector3(mpp / s.x, mpp / s.z, mpp / s.y);
             var t = Txt(rt, "Titulo", title, 34, Palette.Void, TextAlignmentOptions.Top, new Vector2(0, 1), new Vector2(1, 1), new Vector2(18, -90), new Vector2(-18, -14));
             t.fontStyle = FontStyles.Bold; t.characterSpacing = 1;
-            var b = Txt(rt, "Texto", body, 30, Palette.Void, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, new Vector2(22, 18), new Vector2(-22, -100));
-            b.enableAutoSizing = true; b.fontSizeMin = 16; b.fontSizeMax = 30;
+            var b = Txt(rt, "Texto", body, 44, Palette.Void, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, new Vector2(22, 18), new Vector2(-22, -100));
+            b.enableAutoSizing = true; b.fontSizeMin = 20; b.fontSizeMax = 44;
         }
     }
 }
