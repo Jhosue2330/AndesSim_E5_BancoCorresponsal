@@ -1,0 +1,207 @@
+[
+ {
+  "sid": "s01",
+  "start": 0.0,
+  "slot": 13.392,
+  "vstart": 1.2,
+  "vdur": 11.392,
+  "id": "s01",
+  "src": 30,
+  "speed": 0.9,
+  "what": "portal"
+ },
+ {
+  "sid": "s02",
+  "start": 13.392,
+  "slot": 7.755,
+  "vstart": 13.392,
+  "vdur": 6.954667,
+  "id": "s02",
+  "src": 4530,
+  "what": "portal con los dos modos"
+ },
+ {
+  "sid": "s03",
+  "start": 21.147,
+  "slot": 6.731,
+  "vstart": 21.147,
+  "vdur": 5.930667,
+  "id": "s03",
+  "src": 420,
+  "what": "ascensor de vidrio, ciudad y tormenta"
+ },
+ {
+  "sid": "s04",
+  "start": 27.877,
+  "slot": 7.755,
+  "vstart": 27.877,
+  "vdur": 6.954667,
+  "id": "s04",
+  "src": 615,
+  "what": "sala de monitoreo y supervisora"
+ },
+ {
+  "sid": "s05",
+  "start": 35.632,
+  "slot": 9.44,
+  "vstart": 35.632,
+  "vdur": 8.64,
+  "id": "s05",
+  "src": 870,
+  "speed": 0.6,
+  "what": "iniciar, pantallas"
+ },
+ {
+  "sid": "s06",
+  "start": 45.072,
+  "slot": 9.205,
+  "vstart": 45.072,
+  "vdur": 8.405333,
+  "id": "s06",
+  "src": 1060,
+  "dir": "cine",
+  "speed": 0.85,
+  "what": "enjambre rojo (c\u00e1mara de cine)"
+ },
+ {
+  "sid": "s07",
+  "start": 54.277,
+  "slot": 8.843,
+  "vstart": 54.277,
+  "vdur": 8.042667,
+  "id": "s07",
+  "src": 1170,
+  "speed": 0.55,
+  "what": "alerta JUPITER, pantallas rojas"
+ },
+ {
+  "sid": "s08",
+  "start": 63.12,
+  "slot": 7.008,
+  "vstart": 63.12,
+  "vdur": 6.208,
+  "id": "s08",
+  "src": 1320,
+  "speed": 0.7,
+  "what": "bloquear \u00f3rdenes \u00e1mbar"
+ },
+ {
+  "sid": "s09",
+  "start": 70.128,
+  "slot": 8.011,
+  "vstart": 70.128,
+  "vdur": 7.210667,
+  "id": "s09",
+  "src": 1590,
+  "speed": 1.5,
+  "what": "evidencias en el escritorio"
+ },
+ {
+  "sid": "s10",
+  "start": 78.139,
+  "slot": 7.072,
+  "vstart": 78.139,
+  "vdur": 6.272,
+  "id": "s10",
+  "src": 1995,
+  "what": "lupa FANDATION"
+ },
+ {
+  "sid": "s11",
+  "start": 85.211,
+  "slot": 8.816,
+  "vstart": 85.211,
+  "vdur": 6.016,
+  "id": "s11",
+  "src": 3060,
+  "extra": 2.0,
+  "what": "llamada sin respuesta"
+ },
+ {
+  "sid": "s12",
+  "start": 94.027,
+  "slot": 7.029,
+  "vstart": 94.027,
+  "vdur": 6.229333,
+  "id": "s12",
+  "src": 3684,
+  "what": "resultado ataque B"
+ },
+ {
+  "sid": "s13",
+  "start": 101.056,
+  "slot": 9.803,
+  "vstart": 101.056,
+  "vdur": 9.002667,
+  "id": "s13",
+  "src": 3930,
+  "what": "an\u00e1lisis"
+ },
+ {
+  "sid": "s14",
+  "start": 110.859,
+  "slot": 10.037,
+  "vstart": 110.859,
+  "vdur": 9.237333,
+  "id": "s14",
+  "src": 5280,
+  "what": "panel de defensas"
+ },
+ {
+  "sid": "s15",
+  "start": 120.896,
+  "slot": 6.813,
+  "vstart": 120.896,
+  "vdur": 5.013333,
+  "id": "s15",
+  "src": 5740,
+  "dir": "cine",
+  "extra": 1.0,
+  "what": "escudo firewall (c\u00e1mara de cine)"
+ },
+ {
+  "sid": "s16",
+  "start": 127.709,
+  "slot": 6.389,
+  "vstart": 127.709,
+  "vdur": 5.589333,
+  "id": "s16",
+  "src": 8130,
+  "speed": 1.1,
+  "what": "llamada confirmada, fraude confirmado"
+ },
+ {
+  "sid": "s17",
+  "start": 134.099,
+  "slot": 6.353,
+  "vstart": 134.099,
+  "vdur": 4.053333,
+  "id": "s17",
+  "src": 8730,
+  "speed": 1.0,
+  "extra": 1.5,
+  "what": "holograma verde y resultado A"
+ },
+ {
+  "sid": "s18",
+  "start": 140.452,
+  "slot": 7.072,
+  "vstart": 140.452,
+  "vdur": 6.272,
+  "id": "s18",
+  "src": 8400,
+  "speed": 0.9,
+  "what": "viaje del dinero en verde"
+ },
+ {
+  "sid": "s19",
+  "start": 147.524,
+  "slot": 9.664,
+  "vstart": 147.524,
+  "vdur": 4.864,
+  "id": "s19",
+  "src": 8820,
+  "extra": 4.0,
+  "what": "resultado A bajo la tarjeta final"
+ }
+]

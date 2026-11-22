@@ -1,0 +1,21 @@
+[
+ {"id":"s01","say":"Esto es Andes Sim. Escenario cinco: Banco Corresponsal Internacional. Una simulación en realidad virtual, basada en un robo bancario real de dos mil dieciséis, con bancos y personas ficticias."},
+ {"id":"s02","say":"Todo empieza en el portal. Aquí eliges el modo: Ataque, para revivir lo que pasó. O Defensa, para ver cómo se pudo evitar."},
+ {"id":"s03","say":"Un ascensor de vidrio te sube por la fachada. Afuera hay tormenta. Es jueves cuatro de febrero, de noche."},
+ {"id":"s04","say":"Las puertas se abren a la sala de monitoreo. La supervisora te da la misión: vigilar las órdenes de pago del Banco Andino."},
+ {"id":"s05","say":"Tocas iniciar, y en tres pantallas gigantes las órdenes entran en tiempo real. Treinta y seis órdenes. Novecientos cincuenta y un millones de dólares."},
+ {"id":"s06","say":"Pero no las envía el Banco Andino. Un grupo criminal, Lázarus, tomó sus sistemas. Ese enjambre rojo es la intrusión, entrando a las pantallas."},
+ {"id":"s07","say":"¡Alerta! La calle de la agencia que recibe el dinero se llama Júpiter, igual que un petrolero de la lista de sanciones. Las órdenes se congelan."},
+ {"id":"s08","say":"Con la mirada, tocas cada orden en ámbar para bloquearla. Treinta quedan detenidas. Pero cinco, ya pasaron."},
+ {"id":"s09","say":"En el escritorio buscas evidencias. La lista de sanciones. El directorio del Banco Andino, que solo atiende de lunes a viernes."},
+ {"id":"s10","say":"Con la lupa encuentras otra pista: una orden para una fundación mal escrita. Fandeishon. Una sola letra."},
+ {"id":"s11","say":"Llamas al Banco Andino para confirmar. El teléfono suena, y suena. Nadie contesta. Es fin de semana."},
+ {"id":"s12","say":"Resultado del ataque: ochocientos cincuenta millones salvados. Pero ciento un millones de dólares se perdieron."},
+ {"id":"s13","say":"La pantalla de análisis explica por qué. Contactos solo en días hábiles. Ninguna confirmación por otro canal. Y reglas que no frenaron las primeras órdenes."},
+ {"id":"s14","say":"Ahora, modo Defensa. Activas tres controles: contactos de emergencia las veinticuatro horas, llamada a un número registrado, y reglas por destino y monto."},
+ {"id":"s15","say":"Lázarus vuelve a atacar. Y esta vez, el escudo cortafuegos lo detiene sobre la mesa."},
+ {"id":"s16","say":"La llamada sí se contesta. El Banco Andino confirma que no envió esas órdenes. Retengan todo."},
+ {"id":"s17","say":"Las cinco órdenes pagadas pasan a retenidas. Cero dólares perdidos."},
+ {"id":"s18","say":"Una alerta, una llamada y tres reglas. Esa es la diferencia entre perder ciento un millones, y no perder nada."},
+ {"id":"s19","say":"Andes Sim. Hecho por nuestro equipo, con Iúniti, Blénder, Clod Coud y Gúgol Antigráviti."}
+]

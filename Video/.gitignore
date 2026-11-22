@@ -1,0 +1,8 @@
+# Se regeneran con build.py (tomas) y con "npx hyperframes render" (video final)
+assets/shots/
+renders/
+.media/
+.hyperframes/
+node_modules/
+.waveform-cache/
+.thumbnails/

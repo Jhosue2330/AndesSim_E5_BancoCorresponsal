@@ -1,0 +1,40 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    #cl-ground { position: absolute; inset: 0; background: #05070D; }
+    #cl-box { position: absolute; left: 130px; top: 250px; }
+    #cl-bar { position: absolute; left: 0; top: 8px; width: 16px; height: 250px; background: #2BF59A; transform-origin: 50% 0%; }
+    .cl-mask { overflow: hidden; margin-left: 48px; }
+    #cl-kicker { font-family: Inter, sans-serif; font-weight: 700; font-size: 32px; letter-spacing: 0.2em; color: #2BF59A; }
+    #cl-title { font-family: Oswald, sans-serif; font-weight: 600; font-size: 168px; line-height: 1.02; letter-spacing: 0.03em; color: #DDF6FF; }
+    #cl-team { position: absolute; left: 178px; top: 560px; font-family: Inter, sans-serif; font-size: 32px; line-height: 1.6; color: #DDF6FF; }
+    #cl-team b { font-weight: 700; color: #19D3F0; letter-spacing: 0.12em; font-size: 28px; }
+    #cl-tools { position: absolute; left: 178px; top: 850px; font-family: Inter, sans-serif; font-size: 28px; line-height: 1.5; color: #8FA6B8; }
+  </style>
+  <div id="root" data-composition-id="closing" data-width="1920" data-height="1080">
+    <div id="cl-ground"></div>
+    <div id="cl-box">
+      <div id="cl-bar"></div>
+      <div class="cl-mask"><div id="cl-kicker">ESCENARIO 05 · BANCO CORRESPONSAL INTERNACIONAL</div></div>
+      <div class="cl-mask"><div id="cl-title">ANDES-SIM</div></div>
+    </div>
+    <div id="cl-team">
+      <b>EQUIPO</b><br>
+      Meza Miranda Jhosue Alejandro · Limache Cunyas Noemi Cielo · Castro Inga Anyeli Eliana
+    </div>
+    <div id="cl-tools">
+      Hecho con Unity 6, Blender y Google Cardboard · IA: Claude Code y Google Antigravity<br>
+      Tomas grabadas en el juego · Voz: Kokoro (IA) · Música y efectos: biblioteca HeyGen y sonidos del juego
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#cl-ground", { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "power1.inOut" }, 0);
+    tl.fromTo("#cl-bar", { scaleY: 0 }, { scaleY: 1, duration: 0.5, ease: "power3.out" }, 0.6);
+    tl.fromTo("#cl-kicker", { yPercent: 110 }, { yPercent: 0, duration: 0.45, ease: "power4.out" }, 0.75);
+    tl.fromTo("#cl-title", { yPercent: 105 }, { yPercent: 0, duration: 0.6, ease: "power4.out" }, 0.85);
+    tl.fromTo("#cl-team", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 1.4);
+    tl.fromTo("#cl-tools", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 1.7);
+    window.__timelines["closing"] = tl;
+  </script>
+</template>

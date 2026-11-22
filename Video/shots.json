@@ -1,0 +1,21 @@
+[
+ {"id":"s01","src":30,"speed":0.9,"what":"portal"},
+ {"id":"s02","src":4530,"what":"portal con los dos modos"},
+ {"id":"s03","src":420,"what":"ascensor de vidrio, ciudad y tormenta"},
+ {"id":"s04","src":615,"what":"sala de monitoreo y supervisora"},
+ {"id":"s05","src":870,"speed":0.6,"what":"iniciar, pantallas"},
+ {"id":"s06","src":1060,"dir":"cine","speed":0.85,"what":"enjambre rojo (cámara de cine)"},
+ {"id":"s07","src":1170,"speed":0.55,"what":"alerta JUPITER, pantallas rojas"},
+ {"id":"s08","src":1320,"speed":0.7,"what":"bloquear órdenes ámbar"},
+ {"id":"s09","src":1590,"speed":1.5,"what":"evidencias en el escritorio"},
+ {"id":"s10","src":1995,"what":"lupa FANDATION"},
+ {"id":"s11","src":3060,"extra":2.0,"what":"llamada sin respuesta"},
+ {"id":"s12","src":3684,"what":"resultado ataque B"},
+ {"id":"s13","src":3930,"what":"análisis"},
+ {"id":"s14","src":5280,"what":"panel de defensas"},
+ {"id":"s15","src":5740,"dir":"cine","extra":1.0,"what":"escudo firewall (cámara de cine)"},
+ {"id":"s16","src":8130,"speed":1.1,"what":"llamada confirmada, fraude confirmado"},
+ {"id":"s17","src":8730,"speed":1.0,"extra":1.5,"what":"holograma verde y resultado A"},
+ {"id":"s18","src":8400,"speed":0.9,"what":"viaje del dinero en verde"},
+ {"id":"s19","src":8820,"extra":4.0,"what":"resultado A bajo la tarjeta final"}
+]

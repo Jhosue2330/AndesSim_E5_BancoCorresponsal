@@ -59,6 +59,7 @@ Regla: no tocar archivos de una tarea `EN CURSO` de otro agente.
 | 30 | Modo demo automático para grabar el video | Claude | HECHO |
 | 31 | Voz narradora real (TTS) — hoy son subtítulos con "voz" sintetizada por sílabas | Humano | PENDIENTE (decidir herramienta) |
 | 32 | Probar en celular el paquete wow (rendimiento con personajes, lluvia y efectos) | Humano | PENDIENTE |
+| 33 | Video narrado 2:37 con tomas reales del juego, voz, música y efectos (`Video/`, HyperFrames) | Claude | HECHO |
 
 ## Propuestas de cambio al núcleo
 (Si Antigravity necesita cambiar algo en `Scripts/Core` o `Scripts/Interaction`, anotarlo aquí.)

@@ -1,0 +1,37 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    #op-shade { position: absolute; inset: 0;
+      background: linear-gradient(90deg, rgba(5,7,13,.86) 0%, rgba(5,7,13,.55) 45%, rgba(5,7,13,0) 75%); }
+    #op-box { position: absolute; left: 130px; top: 330px; }
+    #op-bar { position: absolute; left: 0; top: 8px; width: 16px; height: 330px; background: #7A5CF0; transform-origin: 50% 0%; }
+    .op-mask { overflow: hidden; margin-left: 48px; }
+    #op-kicker { font-family: Inter, sans-serif; font-weight: 700; font-size: 32px; letter-spacing: 0.2em; color: #19D3F0; }
+    #op-title { font-family: Oswald, sans-serif; font-weight: 600; font-size: 176px; line-height: 1.02; letter-spacing: 0.03em; color: #DDF6FF; }
+    #op-sub { font-family: Oswald, sans-serif; font-weight: 400; font-size: 54px; letter-spacing: 0.04em; color: #DDF6FF; }
+    #op-note { font-family: Inter, sans-serif; font-weight: 400; font-size: 28px; color: #8FA6B8; margin-top: 18px; }
+  </style>
+  <div id="root" data-composition-id="opening" data-width="1920" data-height="1080">
+    <div id="op-shade"></div>
+    <div id="op-box">
+      <div id="op-bar"></div>
+      <div class="op-mask"><div id="op-kicker">REALIDAD VIRTUAL · CASO BANCO ANDINO</div></div>
+      <div class="op-mask"><div id="op-title">ANDES-SIM</div></div>
+      <div class="op-mask"><div id="op-sub">Escenario 05 · Banco Corresponsal Internacional</div></div>
+      <div class="op-mask"><div id="op-note">Simulación educativa · bancos y personas ficticias</div></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#op-shade", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, 0);
+    tl.fromTo("#op-bar", { scaleY: 0 }, { scaleY: 1, duration: 0.5, ease: "power3.out" }, 0.2);
+    tl.fromTo("#op-kicker", { yPercent: 110 }, { yPercent: 0, duration: 0.45, ease: "power4.out" }, 0.35);
+    tl.fromTo("#op-title", { yPercent: 105 }, { yPercent: 0, duration: 0.6, ease: "power4.out" }, 0.45);
+    tl.fromTo("#op-sub", { yPercent: 110 }, { yPercent: 0, duration: 0.5, ease: "power4.out" }, 0.75);
+    tl.fromTo("#op-note", { yPercent: 110 }, { yPercent: 0, duration: 0.5, ease: "power4.out" }, 0.95);
+    tl.to(["#op-note", "#op-sub", "#op-title", "#op-kicker"], { yPercent: -110, duration: 0.35, ease: "power2.in", stagger: 0.05 }, 6.6);
+    tl.to("#op-bar", { scaleY: 0, duration: 0.3, ease: "power2.in" }, 6.85);
+    tl.to("#op-shade", { opacity: 0, duration: 0.6, ease: "power1.in" }, 6.8);
+    window.__timelines["opening"] = tl;
+  </script>
+</template>
